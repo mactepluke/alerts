@@ -1,6 +1,11 @@
 package com.safetynet.alerts.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Person implements IPerson  {
+
+    private static final Logger logger = LoggerFactory.getLogger(Person.class);
 
     private final int id;
     private final String firstName;

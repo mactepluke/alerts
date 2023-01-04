@@ -4,11 +4,15 @@ import com.safetynet.alerts.model.Firestation;
 import com.safetynet.alerts.model.IFirestation;
 import com.safetynet.alerts.repository.IFirestationRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class FirestationDAO implements IFirestationDAO  {
+
+        private static final Logger logger = LoggerFactory.getLogger(FirestationDAO.class);
 
         @Autowired
         private IFirestationRepository firestationRepository;

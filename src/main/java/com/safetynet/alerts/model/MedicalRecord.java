@@ -1,9 +1,14 @@
 package com.safetynet.alerts.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MedicalRecord implements IMedicalRecord    {
+
+    private static final Logger logger = LoggerFactory.getLogger(MedicalRecord.class);
 
     private final int id;
     private final String firstName;

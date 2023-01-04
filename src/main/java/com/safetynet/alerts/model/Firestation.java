@@ -1,6 +1,11 @@
 package com.safetynet.alerts.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Firestation implements IFirestation    {
+
+    private static final Logger logger = LoggerFactory.getLogger(Firestation.class);
 
     private final String address;
     private int number;
