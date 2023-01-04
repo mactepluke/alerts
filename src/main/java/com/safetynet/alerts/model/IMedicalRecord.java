@@ -3,7 +3,6 @@ package com.safetynet.alerts.model;
 import java.util.List;
 
 public interface IMedicalRecord {
-
     int getId();
 
     String getFirstName();

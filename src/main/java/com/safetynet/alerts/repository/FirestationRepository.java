@@ -1,6 +1,5 @@
 package com.safetynet.alerts.repository;
 
-import com.safetynet.alerts.model.IFirestation;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -9,25 +8,21 @@ import java.util.Map;
 @Repository
 public class FirestationRepository implements IFirestationRepository    {
 
-    final Map<Integer, IFirestation> firestationMap;
+    private final Map<String, Integer> firestationMap = new HashMap<>();
 
-    public FirestationRepository() {
-        this.firestationMap = new HashMap<>();
+    @Override
+    public void putFirestation(String address, int firestationNumber)    {
+        this.firestationMap.put(address, firestationNumber);
     }
 
     @Override
-    public void addFirestation(IFirestation firestation)    {
-        this.firestationMap.put(firestation.getStationNumber(), firestation);
+    public int getFirestationNumber(String address)    {
+        return this.firestationMap.get(address);
     }
 
     @Override
-    public IFirestation getFirestation(int id)    {
-        return this.firestationMap.get(id);
-    }
-
-    @Override
-    public boolean deleteFirestation(int id)    {
-        return this.firestationMap.remove(id) != null;
+    public boolean deleteFirestation(String address)    {
+        return this.firestationMap.remove(address) != null;
     }
 
 }

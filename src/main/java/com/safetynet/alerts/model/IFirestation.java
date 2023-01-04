@@ -1,14 +1,11 @@
 package com.safetynet.alerts.model;
 
-import java.util.List;
-
 public interface IFirestation {
 
-    int getStationNumber();
+    void setNumber(int Number);
 
-    void addCoveredAddress(String address);
+    public int getNumber();
 
-    List<String> getCoveredAddresses();
+    public String getAddress();
 
-    void removeCoveredAddress(String address);
 }

@@ -1,15 +1,14 @@
 package com.safetynet.alerts.repository;
 
-import com.safetynet.alerts.model.IFirestation;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IFirestationRepository {
 
-    void addFirestation(IFirestation firestation);
+    void putFirestation(String address, int firestationNumber);
 
-    IFirestation getFirestation(int id);
+    int getFirestationNumber(String address);
 
-    boolean deleteFirestation(int id);
+    boolean deleteFirestation(String address);
 
 }

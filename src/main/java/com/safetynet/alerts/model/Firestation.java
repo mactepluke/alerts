@@ -1,35 +1,25 @@
 package com.safetynet.alerts.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Firestation implements IFirestation    {
 
-    private final int stationNumber;
-    private final List<String> coveredAddresses;
+    private final String address;
+    private int number;
 
-    public Firestation(int stationNumber) {
-        this.stationNumber = stationNumber;
-        this.coveredAddresses = new ArrayList<>();
+    public Firestation(String address, int number)   {
+        this.address = address;
+        this.number = number;
     }
 
-    @Override
-    public int getStationNumber()    {
-        return this.stationNumber;
+    public void setNumber(int number) {
+        this.number = number;
     }
 
-    @Override
-    public void addCoveredAddress(String address)    {
-        this.coveredAddresses.add(address);
+    public int getNumber() {
+        return number;
     }
 
-    @Override
-    public List<String> getCoveredAddresses()    {
-        return this.coveredAddresses;
+    public String getAddress()  {
+        return address;
     }
 
-    @Override
-    public void removeCoveredAddress(String address)    {
-        this.coveredAddresses.remove(address);
-    }
 }
