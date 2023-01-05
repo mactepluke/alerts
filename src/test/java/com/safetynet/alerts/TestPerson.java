@@ -1,27 +1,21 @@
-package com.safetynet.alerts.model;
+package com.safetynet.alerts;
 
+import com.safetynet.alerts.model.IPerson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Person implements IPerson  {
+public class TestPerson implements IPerson {
 
-    private static final Logger logger = LogManager.getLogger(Person.class);
+    private static final Logger logger = LogManager.getLogger(TestPerson.class);
 
-    private final int id;
-    private final String firstName;
-    private final String lastName;
+    private final int id = 0;
+    private final String firstName = null;
+    private final String lastName = null;
     private String address;
     private String city;
     private String zip;
     private String phone;
     private String email;
-
-    public Person(String firstName, String lastName)  {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.id = (firstName+lastName).hashCode();
-        logger.debug("Person object created with ID: {}", this.id);
-    }
 
     @Override
     public int getId()    {

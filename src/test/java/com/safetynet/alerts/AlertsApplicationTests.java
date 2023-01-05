@@ -1,5 +1,13 @@
 package com.safetynet.alerts;
 
+import com.jsoniter.JsonIterator;
+import com.jsoniter.output.JsonStream;
+import com.safetynet.alerts.model.BlankPerson;
+import com.safetynet.alerts.model.IPerson;
+import com.safetynet.alerts.model.Person;
+import com.safetynet.alerts.service.PersonService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -10,11 +18,22 @@ import static org.junit.jupiter.api.Assertions.fail;
 @SpringBootTest
 class AlertsApplicationTests {
 
+    private static final Logger logger = LogManager.getLogger(AlertsApplicationTests.class);
 
     @Test
     @DisplayName("Context loads")
     void contextLoads()   {
 
+    }
+
+    @Test
+    void JSoniterTest()    {
+        IPerson person = JsonIterator.deserialize("{\"firstName\": \"John\", \"lastName\": \"Doe\", \"address\": \"HK\"}", BlankPerson.class);
+        logger.debug(person.getFirstName());
+        logger.debug(person.getLastName());
+        logger.debug(person.getAddress());
+        //person.attachment = Any.wrapArray(new int[]{1, 2, 3});
+        logger.debug(JsonStream.serialize(person));
     }
 
     // Tests for endpoint: http://localhost:8080/person

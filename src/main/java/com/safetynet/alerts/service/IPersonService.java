@@ -8,4 +8,5 @@ public interface IPersonService {
 
     IPerson savePerson(IPerson person);
 
+    IPerson getPerson(int id);
 }

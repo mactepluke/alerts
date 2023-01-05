@@ -2,15 +2,15 @@ package com.safetynet.alerts.dao;
 
 import com.safetynet.alerts.model.IMedicalRecord;
 import com.safetynet.alerts.repository.IMedicalRecordRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MedicalRecordDAO implements IMedicalRecordDAO {
 
-    private static final Logger logger = LoggerFactory.getLogger(MedicalRecordDAO.class);
+    private static final Logger logger = LogManager.getLogger(MedicalRecordDAO.class);
 
     @Autowired
     private IMedicalRecordRepository medicalRecordRepository;
