@@ -5,9 +5,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IFirestationRepository {
 
-    void putFirestation(String address, int firestationNumber);
+    void putFirestation(String address, String firestationNumber);
 
-    int getFirestationNumber(String address);
+    String getFirestationNumber(String address);
 
     boolean deleteFirestation(String address);
 

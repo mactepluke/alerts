@@ -1,11 +1,13 @@
 package com.safetynet.alerts.model;
 
+import com.jsoniter.annotation.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Person implements IPerson  {
 
     private static final Logger logger = LogManager.getLogger(Person.class);
+
 
     private final int id;
     private final String firstName;
@@ -16,11 +18,12 @@ public class Person implements IPerson  {
     private String phone;
     private String email;
 
-    public Person(String firstName, String lastName)  {
+
+    @JsonCreator
+    public Person(@JsonProperty(value = "firstName", required = true) String firstName, @JsonProperty(value = "lastName", required = true) String lastName)  {
         this.firstName = firstName;
         this.lastName = lastName;
         this.id = (firstName+lastName).hashCode();
-        logger.debug("Person object created with ID: {}", this.id);
     }
 
     @Override

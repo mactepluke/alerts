@@ -12,15 +12,15 @@ public class FirestationRepository implements IFirestationRepository    {
 
     private static final Logger logger = LogManager.getLogger(FirestationRepository.class);
 
-    private final Map<String, Integer> firestationMap = new HashMap<>();
+    private final Map<String, String> firestationMap = new HashMap<>();
 
     @Override
-    public void putFirestation(String address, int firestationNumber)    {
+    public void putFirestation(String address, String firestationNumber)    {
         this.firestationMap.put(address, firestationNumber);
     }
 
     @Override
-    public int getFirestationNumber(String address)    {
+    public String getFirestationNumber(String address)    {
         return this.firestationMap.get(address);
     }
 

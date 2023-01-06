@@ -2,9 +2,9 @@ package com.safetynet.alerts.model;
 
 public interface IFirestation {
 
-    void setNumber(int Number);
+    void setStationNumber(String station);
 
-    public int getNumber();
+    public String getStationNumber();
 
     public String getAddress();
 

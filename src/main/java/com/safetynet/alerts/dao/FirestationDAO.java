@@ -19,7 +19,7 @@ public class FirestationDAO implements IFirestationDAO  {
 
         @Override
         public void saveFirestation(IFirestation firestation)    {
-                firestationRepository.putFirestation(firestation.getAddress(), firestation.getNumber());
+                firestationRepository.putFirestation(firestation.getAddress(), firestation.getStationNumber());
         }
 
         @Override

@@ -1,5 +1,7 @@
 package com.safetynet.alerts.model;
 
+import com.jsoniter.annotation.JsonCreator;
+import com.jsoniter.annotation.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +19,8 @@ public class MedicalRecord implements IMedicalRecord    {
     private final List<String> medications;
     private final List<String> allergies;
 
-    public MedicalRecord(String firstName, String lastName)  {
+    @JsonCreator
+    public MedicalRecord(@JsonProperty(value = "firstName", required = true) String firstName, @JsonProperty(value = "lastName", required = true) String lastName)  {
         this.firstName = firstName;
         this.lastName = lastName;
         this.id = (firstName+lastName).hashCode();
