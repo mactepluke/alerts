@@ -1,15 +1,12 @@
 package com.safetynet.alerts.controller;
 
+import com.safetynet.alerts.dao.IPersonDAO;
 import com.safetynet.alerts.model.Person;
-import com.safetynet.alerts.model.IPerson;
-import com.safetynet.alerts.service.IPersonService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 import static org.apache.logging.log4j.util.Strings.isEmpty;
 
@@ -19,7 +16,7 @@ public class PersonController {
     private static final Logger logger = LogManager.getLogger(PersonController.class);
 
     @Autowired
-    IPersonService personService;
+    IPersonDAO personDAO;
 
     @PostMapping(path = "/person", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -37,14 +34,14 @@ public class PersonController {
             logger.error("Invalid post request: empty fields: firstname or lastname");
         }   else {
             logger.info("Successful post request: saving new person in repository with ID: {}", newPerson.getId());
-            personService.savePerson(newPerson);
+            personDAO.savePerson(newPerson);
         }
 
     }
 
     @GetMapping("/person/{id}")
-    public IPerson getEmployee(@PathVariable("id") final int id) {
-        return personService.getPerson(id);
+    public Person getEmployee(@PathVariable("id") final String id) {
+        return personDAO.getPerson(id);
 
     }
 

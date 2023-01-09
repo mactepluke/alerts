@@ -7,7 +7,7 @@ import com.jsoniter.annotation.JsonWrapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Firestation implements IFirestation    {
+public class Firestation   {
 
     private static final Logger logger = LogManager.getLogger(Firestation.class);
 
@@ -20,17 +20,14 @@ public class Firestation implements IFirestation    {
         this.station = station;
     }
 
-    @Override
     public void setStationNumber(String stationNumber) {
         this.station = stationNumber;
     }
 
-    @Override
     public String getStationNumber() {
         return this.station;
     }
 
-    @Override
     public String getAddress()  {
         return this.address;
     }

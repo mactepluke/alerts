@@ -1,32 +1,37 @@
 package com.safetynet.alerts.dao;
 
-import com.safetynet.alerts.model.IMedicalRecord;
-import com.safetynet.alerts.repository.IMedicalRecordRepository;
+import com.safetynet.alerts.model.MedicalRecord;
+import com.safetynet.alerts.model.Person;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class MedicalRecordDAO implements IMedicalRecordDAO {
 
     private static final Logger logger = LogManager.getLogger(MedicalRecordDAO.class);
-
-    @Autowired
-    private IMedicalRecordRepository medicalRecordRepository;
+    private final Map<String, MedicalRecord> medicalRecordsRepository = new HashMap<>();
 
     @Override
-    public void saveMedicalRecord(IMedicalRecord medicalRecord)    {
-        medicalRecordRepository.addMedicalRecord(medicalRecord);
+    public void saveMedicalRecord(MedicalRecord medicalRecord)    {
+        medicalRecordsRepository.put(medicalRecord.getId(), medicalRecord);
     }
 
     @Override
-    public boolean deleteMedicalRecord(int id)    {
-        return medicalRecordRepository.deleteMedicalRecord(id);
+    public MedicalRecord deleteMedicalRecord(String id)    {
+        return medicalRecordsRepository.remove(id);
     }
 
     @Override
-    public IMedicalRecord getMedicalRecord(int id)   {
-        return medicalRecordRepository.getMedicalRecord(id);
+    public MedicalRecord getMedicalRecord(String id)   {
+        return medicalRecordsRepository.get(id);
+    }
+
+    @Override
+    public Map<String, MedicalRecord> getMedicalRecordsTable()  {
+        return medicalRecordsRepository;
     }
 }

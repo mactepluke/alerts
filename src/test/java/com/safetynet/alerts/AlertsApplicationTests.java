@@ -1,16 +1,17 @@
 package com.safetynet.alerts;
 
-import com.jsoniter.JsonIterator;
-import com.safetynet.alerts.model.IPerson;
-import com.safetynet.alerts.model.Person;
-import com.safetynet.alerts.service.DataFileLoader;
+import com.safetynet.alerts.dao.*;
+import com.safetynet.alerts.service.IDataFileLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -20,25 +21,32 @@ class AlertsApplicationTests {
 
     private static final Logger logger = LogManager.getLogger(AlertsApplicationTests.class);
 
+    @Autowired
+    IDataFileLoader dataFileLoader;
+
+    @Autowired
+    IPersonDAO personDAO;
+    @Autowired
+    IMedicalRecordDAO medicalRecordDAO;
+    @Autowired
+    IFirestationDAO firestationDAO;
+
+    private static final String DATA_TEST_FILE_PATH = "src/main/resources/dataTest.json";
+
     @Test
     @DisplayName("Context loads")
-    void contextLoads()   {
+    void contextLoads() {
 
     }
 
     @Test
-    void DataFileLoaderTest()    {
-        DataFileLoader dfl = new DataFileLoader();
-        dfl.loadDataFile();
-    }
+    @DisplayName("Loads a mock file and tests requesting data")
+    void DataFileLoaderTest() {
+        dataFileLoader.loadDataFile(DATA_TEST_FILE_PATH);
 
-    @Test
-    void JSoniterTest()    {
-        IPerson person = JsonIterator.deserialize("{\"firstName\": \"John\", \"lastName\": \"Boyd\", \"address\": \"50 park Avenue\", \"city\": \"NYC\", \"zip\": \"9588\"}", Person.class);
-        //logger.debug(JsonStream.serialize(person));
-        assertEquals("John", person.getFirstName());
-        assertEquals("50 park Avenue", person.getAddress());
-        assertEquals("9588", person.getZip());
+        assertEquals("97451", personDAO.getPerson("JohnBoyd").getZip());
+        assertEquals("hydrapermazol:100mg", medicalRecordDAO.getMedicalRecord("JohnBoyd").getMedications().get(1));
+        assertEquals("3", firestationDAO.getFirestationNumber("1509 Culver St"));
     }
 
     // Tests for endpoint: http://localhost:8080/person

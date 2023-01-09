@@ -1,15 +1,19 @@
 package com.safetynet.alerts.dao;
 
-import com.safetynet.alerts.model.IFirestation;
 import org.springframework.stereotype.Component;
+import com.safetynet.alerts.model.Firestation;
+
+import java.util.Map;
 
 @Component
 public interface IFirestationDAO {
 
-    void saveFirestation(IFirestation firestation);
+    void saveFirestation(Firestation firestation);
 
-    boolean deleteFirestation(String address);
+    String deleteFirestation(String address);
 
-    IFirestation getFirestation(String address);
+    String getFirestationNumber(String address);
+
+    Map<String, String> getFirestationsTable();
 
 }

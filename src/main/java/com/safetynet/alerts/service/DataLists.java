@@ -5,13 +5,15 @@ import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class DataLists {
-    private List<Person> persons;
-    private List<Firestation> firestations;
-    private List<MedicalRecord> medicalrecords;
+public class DataLists implements IDataLists{
+
+    private final List<Person> persons = new ArrayList<>();
+    private final List<Firestation> firestations = new ArrayList<>();
+    private final List<MedicalRecord> medicalrecords = new ArrayList<>();
 
     public List<Person> getPersonsList() {
         return persons;

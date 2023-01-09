@@ -1,14 +1,19 @@
 package com.safetynet.alerts.dao;
 
-import com.safetynet.alerts.model.IPerson;
 import org.springframework.stereotype.Component;
+import com.safetynet.alerts.model.Person;
+
+import java.util.Map;
 
 @Component
 public interface IPersonDAO {
 
-    void savePerson(IPerson person);
+    void savePerson(Person person);
 
-    boolean deletePerson(int id);
+    Person deletePerson(String id);
 
-    IPerson getPerson(int id);
+    Person getPerson(String id);
+
+    Map<String, Person> getPersonsTable();
+
 }
