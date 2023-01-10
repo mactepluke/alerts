@@ -20,7 +20,7 @@ public class PersonController {
 
     @PostMapping(path = "/person", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public void createPerson(@RequestBody Person newPerson) {
+    public void createPerson(Person newPerson) {
 
         logger.trace(newPerson.getFirstName());
         logger.trace(newPerson.getLastName());
@@ -38,11 +38,11 @@ public class PersonController {
         }
 
     }
-
+/*
     @GetMapping("/person/{id}")
     public Person getEmployee(@PathVariable("id") final String id) {
         return personDAO.getPerson(id);
 
-    }
+    }*/
 
 }

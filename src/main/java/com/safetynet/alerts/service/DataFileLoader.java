@@ -1,49 +1,35 @@
 package com.safetynet.alerts.service;
 
 import com.jsoniter.JsonIterator;
-import com.safetynet.alerts.dao.IFirestationDAO;
-import com.safetynet.alerts.dao.IMedicalRecordDAO;
-import com.safetynet.alerts.dao.IPersonDAO;
+import com.safetynet.alerts.dao.*;
 import com.safetynet.alerts.model.Firestation;
 import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
-//@Bean
-public class DataFileLoader implements IDataFileLoader  {
+public class DataFileLoader {
 
     private static final Logger logger = LogManager.getLogger(DataFileLoader.class);
-
-    private final String dataFilePath;
-
-    @Autowired
+    private final IPersonDAO personDAO;
+    private final IMedicalRecordDAO medicalRecordDAO;
+    private final IFirestationDAO firestationDAO;
     private IDataLists dataLists;
 
-    @Autowired
-    private IPersonDAO personDAO;
 
-    @Autowired
-    private IMedicalRecordDAO medicalRecordDAO;
-
-    @Autowired
-    private IFirestationDAO firestationDAO;
-
-    public DataFileLoader(String dataFilePath)   {
-        this.dataFilePath = dataFilePath;
+    public DataFileLoader(String dataFilePath, IPersonDAO personDAO, IMedicalRecordDAO medicalRecordDAO, IFirestationDAO firestationDAO, IDataLists dataLists)   {
+        this.personDAO = personDAO;
+        this.medicalRecordDAO = medicalRecordDAO;
+        this.firestationDAO = firestationDAO;
+        this.dataLists = dataLists;
+        loadDataFile(dataFilePath);
     }
 
-
-    public void loadDataFile(String dataFilePath) {
+    private void loadDataFile(String dataFilePath) {
 
         createDataListsFromString(loadDataFileToString(dataFilePath));
         saveDataListToRepository();

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class DataLists implements IDataLists{
+public class DataLists implements IDataLists    {
 
     private final List<Person> persons = new ArrayList<>();
     private final List<Firestation> firestations = new ArrayList<>();
