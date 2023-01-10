@@ -18,17 +18,16 @@ public class PersonController {
     @Autowired
     IPersonDAO personDAO;
 
-    @PostMapping(path = "/person", consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public void createPerson(Person newPerson) {
+    @PostMapping(path = "/person", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void createPerson(@RequestBody Person newPerson) {
 
-        logger.trace(newPerson.getFirstName());
-        logger.trace(newPerson.getLastName());
-        logger.trace(newPerson.getAddress());
-        logger.trace(newPerson.getCity());
-        logger.trace(newPerson.getZip());
-        logger.trace(newPerson.getPhone());
-        logger.trace(newPerson.getEmail());
+        logger.debug(newPerson.getFirstName());
+        logger.debug(newPerson.getLastName());
+        logger.debug(newPerson.getAddress());
+        logger.debug(newPerson.getCity());
+        logger.debug(newPerson.getZip());
+        logger.debug(newPerson.getPhone());
+        logger.debug(newPerson.getEmail());
 
         if (isEmpty(newPerson.getFirstName()) || isEmpty(newPerson.getLastName()))  {
             logger.error("Invalid post request: empty fields: firstname or lastname");

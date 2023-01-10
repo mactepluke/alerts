@@ -1,6 +1,7 @@
 package com.safetynet.alerts;
 
 import com.safetynet.alerts.dao.*;
+import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.service.DataFileLoader;
 import com.safetynet.alerts.service.DataLists;
 import com.safetynet.alerts.service.IDataLists;
@@ -13,13 +14,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.web.servlet.function.RequestPredicates.contentType;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -44,12 +52,18 @@ class AlertsApplicationTests {
 
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
+    /*@MockBean
     private IPersonDAO personDAO;
-    @Autowired
+    @MockBean
     private IMedicalRecordDAO medicalRecordDAO;
-    @Autowired
+    @MockBean
     private IFirestationDAO firestationDAO;
+    @MockBean
+    private IDataLists dataListsTest;*/
+
+    private final IPersonDAO personDAOTest = new PersonDAO();
+    private final IMedicalRecordDAO medicalRecordDAOTest = new MedicalRecordDAO();
+    private final IFirestationDAO firestationDAOTest = new FirestationDAO();
 
     @Test
     @DisplayName("Context loads")
@@ -60,14 +74,15 @@ class AlertsApplicationTests {
     @Test
     @DisplayName("Loads a test file to repository and requests the correct data")
     void DataFileLoaderTest() {
+
         IDataLists dataListsTest = new DataLists();
-        new DataFileLoader(DATA_TEST_FILE_PATH, personDAO, medicalRecordDAO, firestationDAO, dataListsTest);
+        new DataFileLoader(DATA_TEST_FILE_PATH, personDAOTest, medicalRecordDAOTest, firestationDAOTest, dataListsTest);
 
         logger.debug("Created test DataFileLoader object to load file:" + DATA_TEST_FILE_PATH);
 
-        assertEquals("00100", personDAO.getPerson("JerryTest").getZip());
-        assertEquals("red pill:1kg", medicalRecordDAO.getMedicalRecord("JerryTest").getMedications().get(1));
-        assertEquals("10", firestationDAO.getFirestationNumber("666 Dangerous Neighborhood"));
+        assertEquals("00100", personDAOTest.getPerson("JerryTest").getZip());
+        assertEquals("red pill:1kg", medicalRecordDAOTest.getMedicalRecord("JerryTest").getMedications().get(1));
+        assertEquals("10", firestationDAOTest.getFirestationNumber("666 Dangerous Neighborhood"));
 
     }
 
@@ -77,9 +92,20 @@ class AlertsApplicationTests {
     @DisplayName("Adds a person to the repository via endpoint")
     void addPersonToRepository() throws Exception {
 
-        mockMvc.perform(post("/person"))
-                .andExpect(status().isOk());
+        /*mockMvc.perform(post("/person"))
+                .content(asJsonString(new EmployeeVO(null, "firstName4", "lastName4", "email4@mail.com")))
+                //.andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].firstName", is("Laurent")));*/
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/person")
+                        .content("{\"firstName\":\"tao\", \"lastName\":\"wen\", \"address\":\"test road\", \"city\":\"NYC\", \"zip\":\"50585\", \"phone\":\"555-001-698\", \"email\":\"john.doe@aol.com\"}")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                /*.andExpect(MockMvcResultMatchers.jsonPath("$.firstName").exists())*/;
+
     }
+
 
     @Test
     @Disabled("To be implemented")

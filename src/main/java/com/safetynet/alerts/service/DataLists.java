@@ -15,14 +15,17 @@ public class DataLists implements IDataLists    {
     private final List<Firestation> firestations = new ArrayList<>();
     private final List<MedicalRecord> medicalrecords = new ArrayList<>();
 
+    @Override
     public List<Person> getPersonsList() {
         return persons;
     }
 
+    @Override
     public List<Firestation> getFirestationsList() {
         return firestations;
     }
 
+    @Override
     public List<MedicalRecord> getMedicalrecordsList() {
         return medicalrecords;
     }
