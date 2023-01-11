@@ -72,4 +72,13 @@ public class MedicalRecord  {
         this.allergies.remove(allergy);
     }
 
+    @Override
+    public String toString()    {
+        return "First name: " + this.firstName
+                + ", last name: " + this.lastName
+                + ", birthdate: " + this.birthdate
+                + ", medications: " + this.medications
+                + ", allergies: " + this.allergies;
+    }
+
 }

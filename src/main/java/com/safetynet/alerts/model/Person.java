@@ -78,4 +78,15 @@ public class Person {
         return this.email;
     }
 
+    @Override
+    public String toString()    {
+        return "First name: " + this.firstName
+                + ", last name: " + this.lastName
+                + ", address: " + this.address
+                + ", city: " + this.city
+                + ", zip: " + this.zip
+                + ", phone: " + this.phone
+                + ", email: " + this.email;
+    }
+
 }

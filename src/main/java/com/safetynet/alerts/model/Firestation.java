@@ -1,9 +1,7 @@
 package com.safetynet.alerts.model;
 
 import com.jsoniter.annotation.JsonCreator;
-import com.jsoniter.annotation.JsonIgnore;
 import com.jsoniter.annotation.JsonProperty;
-import com.jsoniter.annotation.JsonWrapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,6 +28,12 @@ public class Firestation   {
 
     public String getAddress()  {
         return this.address;
+    }
+
+    @Override
+    public String toString() {
+        return "Address: " + this.address
+                + ", station: " + this.station;
     }
 
 }

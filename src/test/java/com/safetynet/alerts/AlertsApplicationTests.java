@@ -7,27 +7,20 @@ import com.safetynet.alerts.service.DataLists;
 import com.safetynet.alerts.service.IDataLists;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.web.servlet.function.RequestPredicates.contentType;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -52,8 +45,10 @@ class AlertsApplicationTests {
 
     @Autowired
     private MockMvc mockMvc;
-    /*@MockBean
+    @Autowired
     private IPersonDAO personDAO;
+    /*@MockBean
+    private IPersonDAO personDAOTest;
     @MockBean
     private IMedicalRecordDAO medicalRecordDAO;
     @MockBean
@@ -88,87 +83,104 @@ class AlertsApplicationTests {
 
     // Tests for endpoint: http://localhost:8080/person
     @Test
-    @Disabled("To be implemented")
-    @DisplayName("Adds a person to the repository via endpoint")
-    void addPersonToRepository() throws Exception {
+    @DisplayName("Adds a person via endpoint")
+    void AddPersonTest() throws Exception {
 
-        /*mockMvc.perform(post("/person"))
-                .content(asJsonString(new EmployeeVO(null, "firstName4", "lastName4", "email4@mail.com")))
-                //.andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].firstName", is("Laurent")));*/
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/person")
-                        .content("{\"firstName\":\"tao\", \"lastName\":\"wen\", \"address\":\"test road\", \"city\":\"NYC\", \"zip\":\"50585\", \"phone\":\"555-001-698\", \"email\":\"john.doe@aol.com\"}")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .accept(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/person")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"firstName\":\"John\", \"lastName\":\"Doe\", \"address\":\"Big Kahuna Burger road\", \"city\":\"L.A.\", \"zip\":\"90023\", \"phone\":\"555-177-845\", \"email\":\"john.doe@aol.com\"}")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+    }
+
+
+    @Test
+    @DisplayName("Updates a person's data via endpoint")
+    void UpdatePersonDataTest() throws Exception {
+
+        Person testPerson = new Person("testFirstName", "testLastName");
+        personDAO.savePerson(testPerson);
+
+        /*MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/person/" + testPerson.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"address\":\"Big Apple Street\", \"city\":\"NYC\", \"zip\":\"95230\", \"phone\":\"555-177-845\", \"email\":\"testFirstName.testLastName@gmail.com\"}");
+        mockMvc.perform(builder)
+                .andExpect(MockMvcResultMatchers.status()
+                        .isOk())
+                .andExpect(MockMvcResultMatchers.content()
+                        .string("Person updated."))
+                .andDo(MockMvcResultHandlers.print());*/
+
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/person/" + testPerson.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"address\":\"Big Apple Street\", \"city\":\"NYC\", \"zip\":\"95230\", \"phone\":\"555-177-845\", \"email\":\"test@gmail.com\"}")
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                /*.andExpect(MockMvcResultMatchers.jsonPath("$.firstName").exists())*/;
+                .andExpect(content().string(containsString("Big Apple Street")));
 
     }
 
-
     @Test
-    @Disabled("To be implemented")
-    @DisplayName("Updates a person's data from the repository via endpoint")
-    void updatePersonDataFromRepository() {
-        fail("Test not yet implemented");
-    }
-
-    @Test
-    @Disabled("To be implemented")
-    @DisplayName("Deletes a person from the repository via endpoint")
-    void deletePersonFromRepository() {
+    @DisplayName("Deletes a person via endpoint")
+    void DeletePersonTest() {
         fail("Test not yet implemented");
     }
 
     // Tests for endpoint: http://localhost:8080/firestation
     @Test
-    @Disabled("To be implemented")
-    @DisplayName("Adds a firestation and address map to the repository via endpoint")
-    void addFirestationAddressMapToRepository() {
+    @DisplayName("Adds a firestation and address via endpoint")
+    void AddFirestationAndAddressTest() throws Exception {
+
+        mockMvc.perform(post("/firestation")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"address\":\"Big Kahuna Burger road\", \"station\":\"8\"}")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    @DisplayName("Updates a firestation's number via endpoint")
+    void UpdateFirestationNumberTest() {
         fail("Test not yet implemented");
     }
 
     @Test
-    @Disabled("To be implemented")
-    @DisplayName("Updates a firestation's number from the repository via endpoint")
-    void updateFirestationNumberFromRepository() {
+    @DisplayName("Deletes a firestation and address via endpoint")
+    void DeleteFirestationAndAddressByAddressTest() {
         fail("Test not yet implemented");
     }
 
     @Test
-    @Disabled("To be implemented")
-    @DisplayName("Deletes a firestation and address map by address from the repository via endpoint")
-    void deleteFirestationAddressMapByAddressFromRepository() {
-        fail("Test not yet implemented");
-    }
-
-    @Test
-    @Disabled("To be implemented")
-    @DisplayName("Deletes all firestation and address maps by firestation number from the repository via endpoint")
-    void deleteAllFirestationAddressMapByNumberFromRepository() {
+    @DisplayName("Deletes all firestation and address maps by firestation number via endpoint")
+    void DeleteAllFirestationAndAddressMapByNumberTest() {
         fail("Test not yet implemented");
     }
 
     // Tests for endpoint: http://localhost:8080/medicalRecord
     @Test
-    @Disabled("To be implemented")
-    @DisplayName("Adds a medical record to the repository via endpoint")
-    void addMedicalRecordToRepository() {
+    @DisplayName("Adds a medical record via endpoint")
+    void AddMedicalRecordTest() throws Exception {
+
+        mockMvc.perform(post("/medicalRecord")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"firstName\":\"John\", \"lastName\":\"Doe\", \"birthdate\":\"Big Kahuna Burger road\", \"medications\":[\"modafinil\"], \"allergies\":[\"dust\", \"caviar\"]}")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+    }
+
+    @Test
+    @DisplayName("Updates a medical record's data via endpoint")
+    void UpdateMedicalRepositoryDataTest() {
         fail("Test not yet implemented");
     }
 
     @Test
-    @Disabled("To be implemented")
-    @DisplayName("Updates a medical record's data from the repository via endpoint")
-    void updateMedicalRepositoryDataFromRepository() {
-        fail("Test not yet implemented");
-    }
-
-    @Test
-    @Disabled("To be implemented")
-    @DisplayName("Deletes a medical record from the repository via endpoint")
-    void deleteMedicalRecordFromRepository() {
+    @DisplayName("Deletes a medical record via endpoint")
+    void DeleteMedicalRecordTest() {
         fail("Test not yet implemented");
     }
 
