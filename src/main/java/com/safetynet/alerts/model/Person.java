@@ -4,7 +4,7 @@ import com.jsoniter.annotation.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Person {
+public class Person  {
 
     private static final Logger logger = LogManager.getLogger(Person.class);
 

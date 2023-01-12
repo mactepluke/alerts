@@ -1,6 +1,5 @@
-package com.safetynet.alerts;
+/*package com.safetynet.alerts;
 
-import com.safetynet.alerts.configuration.DataConfig;
 import com.safetynet.alerts.dao.IFirestationDAO;
 import com.safetynet.alerts.dao.IMedicalRecordDAO;
 import com.safetynet.alerts.dao.IPersonDAO;
@@ -24,4 +23,4 @@ public class TestDataConfig {
 
         return new DataFileLoader(DATA_FILE_PATH, personDAO, medicalRecordDAO, firestationDAO, dataLists);
     }
-}
+}*/

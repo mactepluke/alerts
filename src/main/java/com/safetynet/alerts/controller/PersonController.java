@@ -32,9 +32,9 @@ public class PersonController {
                     .body("400 Bad request: firstname or lastname should not be empty");
         } else {
             logger.info("Successful post request: saving new person in repository with id: {}", newPerson.getId());
-            logger.debug(newPerson.toString());
 
-            personDAO.savePerson(newPerson);
+            logger.debug(newPerson.toString());
+            personDAO.save(newPerson);
 
             return ResponseEntity
                     .created(uriComponentsBuilder.build(newPerson))
@@ -43,11 +43,12 @@ public class PersonController {
 
     }
 
-    @PutMapping("{id}")
-    public Person updateEmployee(@PathVariable("id") final String id, @RequestBody Person person) {
-        Optional<Person> e = Optional.ofNullable(personDAO.getPerson(id));
+    @PutMapping(path= "{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Person updatePerson(@PathVariable("id") final String id, @RequestBody Person person) {
+        Optional<Person> e = Optional.ofNullable(personDAO.get(id));
 
         if(e.isPresent()) {
+
             Person currentPerson = e.get();
 
             String address = person.getAddress();
@@ -78,7 +79,7 @@ public class PersonController {
             logger.info("Successful put request: saving new person in repository with id: {}", currentPerson.getId());
             logger.debug(currentPerson.toString());
 
-            personDAO.savePerson(currentPerson);
+            personDAO.save(currentPerson);
 
             return currentPerson;
 
@@ -86,6 +87,20 @@ public class PersonController {
 
             return null;
         }
+    }
+
+    @DeleteMapping("/{id}")
+    public Person deletePerson(@PathVariable("id") final String id) {
+        Person person = personDAO.delete(id);
+
+        if (person != null) {
+            logger.info("Successful delete request: deleted person with id: {}", id);
+        }
+        else {
+            logger.info("Delete request ineffective: no person in repository with id: {}", id);
+        }
+
+        return person;
     }
 
 }

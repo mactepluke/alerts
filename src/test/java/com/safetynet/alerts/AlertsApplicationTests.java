@@ -1,14 +1,14 @@
 package com.safetynet.alerts;
 
 import com.safetynet.alerts.dao.*;
+import com.safetynet.alerts.model.Firestation;
+import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
+import com.safetynet.alerts.repository.DataRepository;
 import com.safetynet.alerts.service.DataFileLoader;
-import com.safetynet.alerts.service.DataLists;
-import com.safetynet.alerts.service.IDataLists;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,38 +27,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AlertsApplicationTests {
 
     private static final Logger logger = LogManager.getLogger(AlertsApplicationTests.class);
-
     private static final String DATA_TEST_FILE_PATH = "src/test/resourcesTest/dataTest.json";
-
-    /*@TestConfiguration
-    static class TestConfig {
-
-        @Bean
-        public DataFileLoader createDataFileLoader(IPersonDAO personDAO, IMedicalRecordDAO medicalRecordDAO, IFirestationDAO firestationDAO, IDataLists dataLists) {
-
-            logger.debug("Created test DataFileLoader object to load file:" + DATA_TEST_FILE_PATH);
-
-            return new DataFileLoader(DATA_TEST_FILE_PATH, personDAO, medicalRecordDAO, firestationDAO, dataLists);
-        }
-    }*/
-
 
     @Autowired
     private MockMvc mockMvc;
     @Autowired
+    private DataFileLoader dataFileLoader;
+    @Autowired
     private IPersonDAO personDAO;
-    /*@MockBean
-    private IPersonDAO personDAOTest;
-    @MockBean
+    @Autowired
     private IMedicalRecordDAO medicalRecordDAO;
-    @MockBean
+    @Autowired
     private IFirestationDAO firestationDAO;
-    @MockBean
-    private IDataLists dataListsTest;*/
+    @Autowired
+    private DataRepository dataRepository;
 
-    private final IPersonDAO personDAOTest = new PersonDAO();
-    private final IMedicalRecordDAO medicalRecordDAOTest = new MedicalRecordDAO();
-    private final IFirestationDAO firestationDAOTest = new FirestationDAO();
+
+    @BeforeEach
+    void clearData() {
+        dataRepository.resetTables();
+    }
 
     @Test
     @DisplayName("Context loads")
@@ -68,17 +56,15 @@ class AlertsApplicationTests {
 
     @Test
     @DisplayName("Loads a test file to repository and requests the correct data")
-    void DataFileLoaderTest() {
+    void LoadDataFileTest() {
 
-        IDataLists dataListsTest = new DataLists();
-        new DataFileLoader(DATA_TEST_FILE_PATH, personDAOTest, medicalRecordDAOTest, firestationDAOTest, dataListsTest);
+        logger.debug("Loading data file:" + DATA_TEST_FILE_PATH);
+        dataFileLoader.loadDataFile(DATA_TEST_FILE_PATH);
+        logger.debug(dataRepository.toString());
 
-        logger.debug("Created test DataFileLoader object to load file:" + DATA_TEST_FILE_PATH);
-
-        assertEquals("00100", personDAOTest.getPerson("JerryTest").getZip());
-        assertEquals("red pill:1kg", medicalRecordDAOTest.getMedicalRecord("JerryTest").getMedications().get(1));
-        assertEquals("10", firestationDAOTest.getFirestationNumber("666 Dangerous Neighborhood"));
-
+        assertEquals("00100", personDAO.get("JerryTest").getZip());
+        assertEquals("red pill:1kg", medicalRecordDAO.get("JerryTest").getMedications().get(1));
+        assertEquals("10", firestationDAO.get("666 Dangerous Neighborhood"));
     }
 
     // Tests for endpoint: http://localhost:8080/person
@@ -91,7 +77,6 @@ class AlertsApplicationTests {
                         .content("{\"firstName\":\"John\", \"lastName\":\"Doe\", \"address\":\"Big Kahuna Burger road\", \"city\":\"L.A.\", \"zip\":\"90023\", \"phone\":\"555-177-845\", \"email\":\"john.doe@aol.com\"}")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
-
     }
 
 
@@ -100,33 +85,59 @@ class AlertsApplicationTests {
     void UpdatePersonDataTest() throws Exception {
 
         Person testPerson = new Person("testFirstName", "testLastName");
-        personDAO.savePerson(testPerson);
+        personDAO.save(testPerson);
 
-        /*MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/person/" + testPerson.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"address\":\"Big Apple Street\", \"city\":\"NYC\", \"zip\":\"95230\", \"phone\":\"555-177-845\", \"email\":\"testFirstName.testLastName@gmail.com\"}");
-        mockMvc.perform(builder)
-                .andExpect(MockMvcResultMatchers.status()
-                        .isOk())
-                .andExpect(MockMvcResultMatchers.content()
-                        .string("Person updated."))
-                .andDo(MockMvcResultHandlers.print());*/
-
-
-        mockMvc.perform(MockMvcRequestBuilders.put("/person/" + testPerson.getId())
+        mockMvc.perform(MockMvcRequestBuilders.put("/person/{id}", testPerson.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"address\":\"Big Apple Street\", \"city\":\"NYC\", \"zip\":\"95230\", \"phone\":\"555-177-845\", \"email\":\"test@gmail.com\"}")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Big Apple Street")));
-
     }
 
     @Test
     @DisplayName("Deletes a person via endpoint")
-    void DeletePersonTest() {
-        fail("Test not yet implemented");
+    void DeletePersonTest() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/person/{id}", "TestPerson"))
+                .andExpect(status().isOk());
+
+    }
+
+    // Tests for endpoint: http://localhost:8080/medicalRecord
+    @Test
+    @DisplayName("Adds a medical record via endpoint")
+    void AddMedicalRecordTest() throws Exception {
+
+        mockMvc.perform(post("/medicalRecord")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"firstName\":\"John\", \"lastName\":\"Doe\", \"birthdate\":\"Big Kahuna Burger road\", \"medications\":[\"modafinil\"], \"allergies\":[\"dust\", \"caviar\"]}")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    @DisplayName("Updates a medical record's data via endpoint")
+    void UpdateMedicalRepositoryDataTest() throws Exception {
+
+        MedicalRecord testMedicalRecord = new MedicalRecord("testFirstName", "testLastName");
+        medicalRecordDAO.save(testMedicalRecord);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/medicalRecord/{id}", testMedicalRecord.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"birthdate\":\"11/08/1980\", \"allergies\":[\"dust\", \"caviar\"]}")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("caviar")));
+    }
+
+    @Test
+    @DisplayName("Deletes a medical record via endpoint")
+    void DeleteMedicalRecordTest() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/medicalRecord/{id}", "TestMedicalRecord"))
+                .andExpect(status().isOk());
+
     }
 
     // Tests for endpoint: http://localhost:8080/firestation
@@ -143,44 +154,32 @@ class AlertsApplicationTests {
 
     @Test
     @DisplayName("Updates a firestation's number via endpoint")
-    void UpdateFirestationNumberTest() {
-        fail("Test not yet implemented");
+    void UpdateFirestationNumberTest() throws Exception {
+
+        Firestation testFirestation = new Firestation("Maple St", "1");
+        firestationDAO.save(testFirestation);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/firestation/{address}", testFirestation.getAddress())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"address\":\"Maple St\", \"station\":\"2\"}")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("2")));
     }
 
     @Test
     @DisplayName("Deletes a firestation and address via endpoint")
-    void DeleteFirestationAndAddressByAddressTest() {
-        fail("Test not yet implemented");
+    void DeleteFirestationAndAddressByAddressTest() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/firestation/{address}", "Test St"))
+                .andExpect(status().isOk());
+
     }
 
     @Test
-    @DisplayName("Deletes all firestation and address maps by firestation number via endpoint")
+    @Disabled("Not implemented")
+    @DisplayName("Deletes all firestation/address maps by firestation number via endpoint")
     void DeleteAllFirestationAndAddressMapByNumberTest() {
-        fail("Test not yet implemented");
-    }
-
-    // Tests for endpoint: http://localhost:8080/medicalRecord
-    @Test
-    @DisplayName("Adds a medical record via endpoint")
-    void AddMedicalRecordTest() throws Exception {
-
-        mockMvc.perform(post("/medicalRecord")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"firstName\":\"John\", \"lastName\":\"Doe\", \"birthdate\":\"Big Kahuna Burger road\", \"medications\":[\"modafinil\"], \"allergies\":[\"dust\", \"caviar\"]}")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
-
-    }
-
-    @Test
-    @DisplayName("Updates a medical record's data via endpoint")
-    void UpdateMedicalRepositoryDataTest() {
-        fail("Test not yet implemented");
-    }
-
-    @Test
-    @DisplayName("Deletes a medical record via endpoint")
-    void DeleteMedicalRecordTest() {
         fail("Test not yet implemented");
     }
 

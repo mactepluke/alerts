@@ -1,36 +1,37 @@
 package com.safetynet.alerts.dao;
 
 import com.safetynet.alerts.model.Person;
+import com.safetynet.alerts.repository.DataRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.Map.Entry;
+
+import static java.lang.System.lineSeparator;
 
 @Component
 public class PersonDAO implements IPersonDAO {
 
     private static final Logger logger = LogManager.getLogger(PersonDAO.class);
-    private final Map<String, Person> personsRepository = new HashMap<>();
+
+    @Autowired
+    private DataRepository dataRepository;
 
     @Override
-    public void savePerson(Person person) {
-        personsRepository.put(person.getId(), person);
+    public void save(Person person) {
+        dataRepository.getPersonsTable().put(person.getId(), person);
     }
 
     @Override
-    public Person deletePerson(String id) {
-        return personsRepository.remove(id);
+    public Person delete(String id) {
+        return dataRepository.getPersonsTable().remove(id);
     }
 
     @Override
-    public Person getPerson(String id) {
-        return personsRepository.get(id);
-    }
-
-    @Override
-    public Map<String, Person> getPersonsTable()  {
-        return personsRepository;
+    public Person get(String id) {
+        return dataRepository.getPersonsTable().get(id);
     }
 
 }
