@@ -2,15 +2,14 @@ package com.safetynet.alerts.dao;
 
 import com.safetynet.alerts.model.Firestation;
 
+import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.repository.DataRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static java.lang.System.lineSeparator;
 
@@ -42,6 +41,22 @@ public class FirestationDAO implements IFirestationDAO  {
         @Override
         public String get(String address)   {
                 return dataRepository.getFirestationsTable().get(address);
+        }
+
+        @Override
+        public List<String> getAddresses(String station)   {
+
+                List<String> addresses = new ArrayList<>();
+                Map<String, String> firestationsTable = dataRepository.getFirestationsTable();
+
+                for (Map.Entry<String, String> entry : firestationsTable.entrySet()) {
+
+                        if (Objects.equals(entry.getValue(), station))        {
+                                addresses.add(entry.getKey());
+                        }
+                }
+
+                return addresses;
         }
 
 }

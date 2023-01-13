@@ -24,12 +24,15 @@ public class PersonController {
     private IPersonDAO personDAO;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public ResponseEntity<String> createPerson(@RequestBody Person newPerson, UriComponentsBuilder uriComponentsBuilder) {
+
+        logger.info("Post request received: create a new person in repository");
 
         if (isEmpty(newPerson.getFirstName()) || isEmpty(newPerson.getLastName())) {
             logger.error("Invalid post request: empty fields: firstname or lastname");
             return ResponseEntity.badRequest()
-                    .body("400 Bad request: firstname or lastname should not be empty");
+                    .body("Bad request: firstname or lastname should not be empty");
         } else {
             logger.info("Successful post request: saving new person in repository with id: {}", newPerson.getId());
 
@@ -38,13 +41,17 @@ public class PersonController {
 
             return ResponseEntity
                     .created(uriComponentsBuilder.build(newPerson))
-                    .body("201 Successful post request");
+                    .body("Successful post request");
         }
 
     }
 
     @PutMapping(path= "{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public Person updatePerson(@PathVariable("id") final String id, @RequestBody Person person) {
+
+        logger.info("Put request received: update a person in repository");
+
         Optional<Person> e = Optional.ofNullable(personDAO.get(id));
 
         if(e.isPresent()) {
@@ -90,7 +97,11 @@ public class PersonController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseBody
     public Person deletePerson(@PathVariable("id") final String id) {
+
+        logger.info("Delete request received: delete a person from repository");
+
         Person person = personDAO.delete(id);
 
         if (person != null) {

@@ -25,7 +25,10 @@ public class MedicalRecordController {
     private IMedicalRecordDAO medicalRecordDAO;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public ResponseEntity<String> createMedicalRecord(@RequestBody MedicalRecord newMedicalRecord, UriComponentsBuilder uriComponentsBuilder) {
+
+        logger.info("Post request received: create a new medical record in repository");
 
         if (isEmpty(newMedicalRecord.getFirstName()) || isEmpty(newMedicalRecord.getLastName())) {
             logger.error("Invalid post request: empty fields: first name or last name");
@@ -45,7 +48,11 @@ public class MedicalRecordController {
     }
 
     @PutMapping(path = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public MedicalRecord updateMedicalRecord(@PathVariable("id") final String id, @RequestBody MedicalRecord medicalRecord) {
+
+        logger.info("Put request received: update a firestation in repository");
+
         Optional<MedicalRecord> e = Optional.ofNullable(medicalRecordDAO.get(id));
 
         if (e.isPresent()) {
@@ -88,7 +95,11 @@ public class MedicalRecordController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseBody
     public MedicalRecord deleteMedicalRecord(@PathVariable("id") final String id) {
+
+        logger.info("Delete request received: delete a medical record from repository");
+
         MedicalRecord medicalRecord = medicalRecordDAO.delete(id);
 
         if (medicalRecord != null) {

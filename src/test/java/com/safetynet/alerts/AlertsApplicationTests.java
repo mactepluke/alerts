@@ -1,8 +1,5 @@
 package com.safetynet.alerts;
 
-import com.safetynet.alerts.dao.*;
-import com.safetynet.alerts.model.MedicalRecord;
-import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.repository.DataRepository;
 import com.safetynet.alerts.service.DataFileLoader;
 import org.apache.logging.log4j.LogManager;
@@ -58,7 +55,6 @@ class AlertsApplicationTests {
     @Test
     @DisplayName("Context loads")
     void contextLoads() {
-
     }
 
 
@@ -83,7 +79,7 @@ class AlertsApplicationTests {
         @DisplayName("Update a person's data")
         void UpdatePersonDataEndpointTest() throws Exception {
 
-            mockMvc.perform(MockMvcRequestBuilders.put("/person/{id}", testPerson.getId())
+            mockMvc.perform(MockMvcRequestBuilders.put("/person/{id}", "testFirstNametestLastName")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{\"address\":\"Big Apple Street\", \"city\":\"NYC\", \"zip\":\"95230\", \"phone\":\"555-177-845\", \"email\":\"test@gmail.com\"}")
                             .accept(MediaType.APPLICATION_JSON))
@@ -95,7 +91,7 @@ class AlertsApplicationTests {
         @DisplayName("Delete a person")
         void DeletePersonEndpointTest() throws Exception {
 
-            mockMvc.perform(MockMvcRequestBuilders.delete("/person/{id}", "TestPerson"))
+            mockMvc.perform(MockMvcRequestBuilders.delete("/person/{id}", "JerryTest"))
                     .andExpect(status().isOk());
 
         }
@@ -116,7 +112,7 @@ class AlertsApplicationTests {
         @DisplayName("Update a medical record's data")
         void UpdateMedicalRepositoryDataEndpointTest() throws Exception {
 
-            mockMvc.perform(MockMvcRequestBuilders.put("/medicalRecord/{id}", testMedicalRecord.getId())
+            mockMvc.perform(MockMvcRequestBuilders.put("/medicalRecord/{id}", "testFirstNametestLastName")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{\"birthdate\":\"11/08/1980\", \"allergies\":[\"dust\", \"caviar\"]}")
                             .accept(MediaType.APPLICATION_JSON))
