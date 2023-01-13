@@ -2,7 +2,6 @@ package com.safetynet.alerts.controller;
 
 import com.safetynet.alerts.dao.IMedicalRecordDAO;
 import com.safetynet.alerts.model.MedicalRecord;
-import com.safetynet.alerts.model.Person;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ public class MedicalRecordController {
     private static final Logger logger = LogManager.getLogger(MedicalRecordController.class);
 
     @Autowired
-    IMedicalRecordDAO medicalRecordDAO;
+    private IMedicalRecordDAO medicalRecordDAO;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createMedicalRecord(@RequestBody MedicalRecord newMedicalRecord, UriComponentsBuilder uriComponentsBuilder) {
@@ -32,15 +31,15 @@ public class MedicalRecordController {
             logger.error("Invalid post request: empty fields: first name or last name");
 
             return ResponseEntity.badRequest()
-                    .body("400 Bad request: firstname or lastname should not be empty");
+                    .body("Bad request: firstname or lastname should not be empty");
         } else {
             logger.info("Successful post request: saving new medical record in repository with id: {}", newMedicalRecord.getId());
-            logger.debug(newMedicalRecord.toString());
+            logger.debug(newMedicalRecord);
             medicalRecordDAO.save(newMedicalRecord);
 
             return ResponseEntity
                     .created(uriComponentsBuilder.build(newMedicalRecord))
-                    .body("201 Successful post request");
+                    .body("Successful post request");
         }
 
     }
@@ -75,15 +74,15 @@ public class MedicalRecordController {
             }
 
 
-            logger.info("Successful put request: saving new medical record in repository with id: {}", currentMedicalRecord.getId());
-            logger.debug(currentMedicalRecord.toString());
+            logger.info("Successful put request: saving new medical record in repository with id: {}", id);
+            logger.debug(currentMedicalRecord);
 
             medicalRecordDAO.save(currentMedicalRecord);
 
             return currentMedicalRecord;
 
         } else {
-
+            logger.error("Cannot update medical record: no medical record in repository with id: {}", id);
             return null;
         }
     }
@@ -96,7 +95,7 @@ public class MedicalRecordController {
             logger.info("Successful delete request: deleted medical record with id: {}", id);
         }
         else {
-            logger.info("Delete request ineffective: no medical record in repository with id: {}", id);
+            logger.error("Cannot delete medical record: no medical record in repository with id: {}", id);
         }
 
         return medicalRecord;

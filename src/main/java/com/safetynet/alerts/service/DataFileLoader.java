@@ -5,9 +5,6 @@ import com.safetynet.alerts.dao.*;
 import com.safetynet.alerts.model.Firestation;
 import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,13 +12,12 @@ import java.util.List;
 
 public class DataFileLoader {
 
-    private static final Logger logger = LogManager.getLogger(DataFileLoader.class);
-
     private final IPersonDAO personDAO;
     private final IMedicalRecordDAO medicalRecordDAO;
     private final IFirestationDAO firestationDAO;
     private IDataLists dataLists;
 
+    //@Autowired
     public DataFileLoader(String dataFilePath, IPersonDAO personDAO, IMedicalRecordDAO medicalRecordDAO, IFirestationDAO firestationDAO, IDataLists dataLists)   {
         this.personDAO = personDAO;
         this.medicalRecordDAO = medicalRecordDAO;

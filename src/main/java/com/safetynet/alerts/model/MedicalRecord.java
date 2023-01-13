@@ -2,15 +2,11 @@ package com.safetynet.alerts.model;
 
 import com.jsoniter.annotation.JsonCreator;
 import com.jsoniter.annotation.JsonProperty;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MedicalRecord  {
-
-    private static final Logger logger = LoggerFactory.getLogger(MedicalRecord.class);
 
     private final String id;
     private final String firstName;
@@ -74,7 +70,7 @@ public class MedicalRecord  {
 
     @Override
     public String toString()    {
-        return "First name: " + this.firstName
+        return "first name: " + this.firstName
                 + ", last name: " + this.lastName
                 + ", birthdate: " + this.birthdate
                 + ", medications: " + this.medications

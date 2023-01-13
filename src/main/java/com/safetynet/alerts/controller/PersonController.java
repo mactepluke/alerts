@@ -21,7 +21,7 @@ public class PersonController {
     private static final Logger logger = LogManager.getLogger(PersonController.class);
 
     @Autowired
-    IPersonDAO personDAO;
+    private IPersonDAO personDAO;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createPerson(@RequestBody Person newPerson, UriComponentsBuilder uriComponentsBuilder) {
@@ -33,7 +33,7 @@ public class PersonController {
         } else {
             logger.info("Successful post request: saving new person in repository with id: {}", newPerson.getId());
 
-            logger.debug(newPerson.toString());
+            logger.debug(newPerson);
             personDAO.save(newPerson);
 
             return ResponseEntity
@@ -76,15 +76,15 @@ public class PersonController {
                 currentPerson.setEmail(email);
             }
 
-            logger.info("Successful put request: saving new person in repository with id: {}", currentPerson.getId());
-            logger.debug(currentPerson.toString());
+            logger.info("Successful put request: saving new person in repository with id: {}", id);
+            logger.debug(currentPerson);
 
             personDAO.save(currentPerson);
 
             return currentPerson;
 
         } else {
-
+            logger.error("Cannot update person: no person in repository with id: {}", id);
             return null;
         }
     }
@@ -97,7 +97,7 @@ public class PersonController {
             logger.info("Successful delete request: deleted person with id: {}", id);
         }
         else {
-            logger.info("Delete request ineffective: no person in repository with id: {}", id);
+            logger.error("Cannot delete person: no person in repository with id: {}", id);
         }
 
         return person;

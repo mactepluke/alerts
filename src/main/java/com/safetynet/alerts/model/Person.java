@@ -1,13 +1,9 @@
 package com.safetynet.alerts.model;
 
 import com.jsoniter.annotation.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 
 public class Person  {
-
-    private static final Logger logger = LogManager.getLogger(Person.class);
-
 
     private final String id;
     private final String firstName;
@@ -80,7 +76,7 @@ public class Person  {
 
     @Override
     public String toString()    {
-        return "First name: " + this.firstName
+        return "first name: " + this.firstName
                 + ", last name: " + this.lastName
                 + ", address: " + this.address
                 + ", city: " + this.city

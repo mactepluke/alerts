@@ -2,12 +2,8 @@ package com.safetynet.alerts.model;
 
 import com.jsoniter.annotation.JsonCreator;
 import com.jsoniter.annotation.JsonProperty;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class Firestation   {
-
-    private static final Logger logger = LogManager.getLogger(Firestation.class);
 
     private final String address;
     private String station;
@@ -32,7 +28,7 @@ public class Firestation   {
 
     @Override
     public String toString() {
-        return "Address: " + this.address
+        return "address: " + this.address
                 + ", station: " + this.station;
     }
 

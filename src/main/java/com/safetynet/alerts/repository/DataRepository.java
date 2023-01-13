@@ -1,5 +1,6 @@
 package com.safetynet.alerts.repository;
 
+import com.safetynet.alerts.model.Firestation;
 import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
 import org.springframework.stereotype.Repository;
@@ -42,7 +43,7 @@ public class DataRepository {
         stringRepository.append(lineSeparator());
         stringRepository.append(lineSeparator());
         for (Map.Entry<String, Person> entry : personsTable.entrySet()) {
-            stringRepository.append(entry.toString()).append(lineSeparator());
+            stringRepository.append(entry.getValue()).append(lineSeparator());
         }
 
         stringRepository.append(lineSeparator());
@@ -51,7 +52,7 @@ public class DataRepository {
         stringRepository.append(lineSeparator());
 
         for (Map.Entry<String, MedicalRecord> entry : medicalRecordsTable.entrySet()) {
-            stringRepository.append(entry.toString()).append(lineSeparator());
+            stringRepository.append(entry.getValue()).append(lineSeparator());
         }
 
         stringRepository.append(lineSeparator());
@@ -60,7 +61,8 @@ public class DataRepository {
         stringRepository.append(lineSeparator());
 
         for (Map.Entry<String, String> entry : firestationsTable.entrySet()) {
-            stringRepository.append(entry.toString()).append(lineSeparator());
+            Firestation firestation = new Firestation(entry.getKey(), entry.getValue());
+            stringRepository.append(firestation).append(lineSeparator());
         }
 
         stringRepository.append(lineSeparator());
