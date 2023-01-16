@@ -2,7 +2,6 @@ package com.safetynet.alerts.dao;
 
 import com.safetynet.alerts.model.Firestation;
 
-import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.repository.DataRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-import static java.lang.System.lineSeparator;
 
 @Component
 public class FirestationDAO implements IFirestationDAO  {
@@ -28,6 +26,7 @@ public class FirestationDAO implements IFirestationDAO  {
 
         @Override
         public String delete(String address)    {
+
                 return dataRepository.getFirestationsTable().remove(address);
         }
 

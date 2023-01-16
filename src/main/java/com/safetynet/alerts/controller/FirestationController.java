@@ -75,7 +75,7 @@ public class FirestationController {
 
     @DeleteMapping("/{value}")
     @ResponseBody
-    public String deleteFirestationAtAddress(@PathVariable("value") final String value) {
+    public String deleteFirestation(@PathVariable("value") final String value) {
 
         logger.info("Delete request received: delete firestation(s) from repository");
 

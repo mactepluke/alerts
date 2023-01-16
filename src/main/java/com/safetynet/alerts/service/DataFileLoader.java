@@ -1,35 +1,40 @@
 package com.safetynet.alerts.service;
 
 import com.jsoniter.JsonIterator;
+import com.safetynet.alerts.configuration.DataConfig;
 import com.safetynet.alerts.dao.*;
 import com.safetynet.alerts.model.Firestation;
 import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
+import com.safetynet.alerts.repository.DataRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+@Service
 public class DataFileLoader {
 
-    private final IPersonDAO personDAO;
-    private final IMedicalRecordDAO medicalRecordDAO;
-    private final IFirestationDAO firestationDAO;
-    private IDataLists dataLists;
+    private static final Logger logger = LogManager.getLogger(DataFileLoader.class);
 
-    //@Autowired
-    public DataFileLoader(String dataFilePath, IPersonDAO personDAO, IMedicalRecordDAO medicalRecordDAO, IFirestationDAO firestationDAO, IDataLists dataLists)   {
-        this.personDAO = personDAO;
-        this.medicalRecordDAO = medicalRecordDAO;
-        this.firestationDAO = firestationDAO;
-        this.dataLists = dataLists;
-        loadDataFile(dataFilePath);
-    }
+    IDataLists dataLists = new DataLists();
 
-    public void loadDataFile(String dataFilePath) {
+    public DataRepository loadDataFile(String dataFilePath) {
+
+        DataRepository dataRepository;
 
         createDataListsFromString(loadDataFileToString(dataFilePath));
-        saveDataListToRepository();
+        dataRepository = saveDataListToRepository();
+
+        return dataRepository;
     }
 
     private String loadDataFileToString(String dataFilePath) {
@@ -54,24 +59,35 @@ public class DataFileLoader {
         return loadedFile.toString();
     }
 
-    private void saveDataListToRepository() {
+    private DataRepository saveDataListToRepository() {
+
+        DataRepository dataRepository = new DataRepository();
 
         List<Person> persons = dataLists.getPersonsList();
         List<Firestation> firestations = dataLists.getFirestationsList();
         List<MedicalRecord> medicalRecords = dataLists.getMedicalrecordsList();
 
+        Map<String, Person> personsTable = new HashMap<>();
+        Map<String, MedicalRecord> medicalRecordsTable = new HashMap<>();
+        Map<String, String> firestationsTable = new HashMap<>();
+
         for (Person person : persons) {
-            personDAO.save(person);
+            personsTable.put(person.getId(), person);
         }
 
         for (MedicalRecord medicalRecord : medicalRecords) {
-            medicalRecordDAO.save(medicalRecord);
+            medicalRecordsTable.put(medicalRecord.getId(), medicalRecord);
         }
 
         for (Firestation firestation : firestations) {
-            firestationDAO.save(firestation);
+            firestationsTable.put(firestation.getAddress(), firestation.getStationNumber());
         }
 
+        dataRepository.setPersonsTable(personsTable);
+        dataRepository.setMedicalRecordsTable(medicalRecordsTable);
+        dataRepository.setFirestationsTable(firestationsTable);
+
+        return dataRepository;
     }
 
     private void createDataListsFromString(String input) {

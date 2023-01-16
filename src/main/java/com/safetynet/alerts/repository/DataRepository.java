@@ -3,6 +3,7 @@ package com.safetynet.alerts.repository;
 import com.safetynet.alerts.model.Firestation;
 import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -10,11 +11,23 @@ import java.util.Map;
 
 import static java.lang.System.lineSeparator;
 
-@Repository
+
 public class DataRepository {
     private Map<String, Person> personsTable = new HashMap<>();
     private Map<String, MedicalRecord> medicalRecordsTable = new HashMap<>();
     private Map<String, String> firestationsTable = new HashMap<>();
+
+    public void setPersonsTable(Map<String, Person> personsTable) {
+        this.personsTable = personsTable;
+    }
+
+    public void setMedicalRecordsTable(Map<String, MedicalRecord> medicalRecordsTable) {
+        this.medicalRecordsTable = medicalRecordsTable;
+    }
+
+    public void setFirestationsTable(Map<String, String> firestationsTable) {
+        this.firestationsTable = firestationsTable;
+    }
 
     public Map<String, Person> getPersonsTable() {
         return this.personsTable;
@@ -27,10 +40,11 @@ public class DataRepository {
     public Map<String, String> getFirestationsTable() {
         return this.firestationsTable;
     }
-    public void resetTables() {
-        this.personsTable = new HashMap<>();
-        this.medicalRecordsTable = new HashMap<>();
-        this.firestationsTable = new HashMap<>();
+
+    public void copyRepository(DataRepository dataRepository) {
+        this.personsTable = dataRepository.getPersonsTable();
+        this.medicalRecordsTable = dataRepository.getMedicalRecordsTable();
+        this.firestationsTable = dataRepository.getFirestationsTable();
     }
 
     @Override
