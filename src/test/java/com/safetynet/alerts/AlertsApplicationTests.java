@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import static com.safetynet.alerts.configuration.DataConfig.getApplicationProperty;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -63,8 +64,8 @@ class AlertsApplicationTests {
 
 
 @Nested
-@DisplayName("Endpoint requests")
-class EndpointRequests {
+@DisplayName("Basic Endpoints requests")
+class BasicEndpointsRequests {
 
     // Tests for endpoint: http://localhost:8080/person
     @Test
@@ -163,4 +164,19 @@ class EndpointRequests {
                 .andExpect(status().isOk());
     }
 }
+
+    @Nested
+    @DisplayName("Advanced Endpoints requests")
+    class AdvancedEndpointsRequests {
+
+        // http://localhost:8080/firestation?stationNumber=<station_number>
+        @Test
+        @DisplayName("Get the persons covered by a firestation")
+        void getPersonsByFirestationEndpointTest() throws Exception {
+
+            mockMvc.perform(MockMvcRequestBuilders.get("/firestation?stationNumber=3"))
+                    .andExpect(status().isOk());
+        }
+
+    }
 }
