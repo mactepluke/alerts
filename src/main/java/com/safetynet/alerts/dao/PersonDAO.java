@@ -16,8 +16,9 @@ public class PersonDAO implements IPersonDAO {
     private DataRepository dataRepository;
 
     @Override
-    public void save(Person person) {
+    public Person save(Person person) {
         dataRepository.getPersonsTable().put(person.getId(), person);
+        return person;
     }
 
     @Override

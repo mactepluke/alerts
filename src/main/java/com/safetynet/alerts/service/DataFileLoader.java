@@ -1,18 +1,13 @@
 package com.safetynet.alerts.service;
 
 import com.jsoniter.JsonIterator;
-import com.safetynet.alerts.configuration.DataConfig;
-import com.safetynet.alerts.dao.*;
 import com.safetynet.alerts.model.Firestation;
 import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.repository.DataRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -21,12 +16,13 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class DataFileLoader {
+public class DataFileLoader implements IDataFileLoader {
 
     private static final Logger logger = LogManager.getLogger(DataFileLoader.class);
 
     IDataLists dataLists = new DataLists();
 
+    @Override
     public DataRepository loadDataFile(String dataFilePath) {
 
         DataRepository dataRepository;

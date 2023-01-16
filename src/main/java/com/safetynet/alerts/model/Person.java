@@ -2,7 +2,6 @@ package com.safetynet.alerts.model;
 
 import com.jsoniter.annotation.*;
 
-
 public class Person  {
 
     private final String id;

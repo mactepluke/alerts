@@ -16,8 +16,9 @@ public class MedicalRecordDAO implements IMedicalRecordDAO {
     private DataRepository dataRepository;
 
     @Override
-    public void save(MedicalRecord medicalRecord)    {
+    public MedicalRecord save(MedicalRecord medicalRecord)    {
         dataRepository.getMedicalRecordsTable().put(medicalRecord.getId(), medicalRecord);
+        return medicalRecord;
     }
 
     @Override

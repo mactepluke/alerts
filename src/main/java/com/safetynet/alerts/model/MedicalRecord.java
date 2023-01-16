@@ -2,7 +2,6 @@ package com.safetynet.alerts.model;
 
 import com.jsoniter.annotation.JsonCreator;
 import com.jsoniter.annotation.JsonProperty;
-
 import java.util.ArrayList;
 import java.util.List;
 

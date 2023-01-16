@@ -1,26 +1,19 @@
 package com.safetynet.alerts;
 
-import com.safetynet.alerts.configuration.MiscConfig;
 import com.safetynet.alerts.repository.DataRepository;
-import com.safetynet.alerts.service.DataFileLoader;
+import com.safetynet.alerts.service.IDataFileLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Properties;
-
-import static org.hamcrest.Matchers.containsString;
+import static com.safetynet.alerts.configuration.DataConfig.getApplicationProperty;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -35,7 +28,7 @@ class AlertsApplicationTests {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    DataFileLoader dataFileLoader;
+    IDataFileLoader dataFileLoader;
     @Autowired
     private DataRepository dataRepository;
 
@@ -45,7 +38,7 @@ class AlertsApplicationTests {
 
         logger.info("*** SETTING UP JUNIT TESTS ***");
 
-        String dataFilePath = MiscConfig.getProp("testdatafilepath");
+        String dataFilePath = getApplicationProperty("testdatafilepath");
 
         logger.debug("Loading data file: {}", dataFilePath);
 

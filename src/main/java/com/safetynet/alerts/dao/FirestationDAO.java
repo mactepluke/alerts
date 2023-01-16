@@ -1,13 +1,11 @@
 package com.safetynet.alerts.dao;
 
 import com.safetynet.alerts.model.Firestation;
-
 import com.safetynet.alerts.repository.DataRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.util.*;
 
 
@@ -20,8 +18,9 @@ public class FirestationDAO implements IFirestationDAO  {
         private DataRepository dataRepository;
 
         @Override
-        public void save(Firestation firestation)    {
+        public Firestation save(Firestation firestation)    {
                 dataRepository.getFirestationsTable().put(firestation.getAddress(), firestation.getStationNumber());
+                return firestation;
         }
 
         @Override
