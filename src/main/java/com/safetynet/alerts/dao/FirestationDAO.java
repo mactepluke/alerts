@@ -43,7 +43,7 @@ public class FirestationDAO implements IFirestationDAO  {
 
         @Override
         public List<String> getAddresses(String station)   {
-
+                int addressCount = 0;
                 List<String> addresses = new ArrayList<>();
                 Map<String, String> firestationsTable = dataRepository.getFirestationsTable();
 
@@ -51,7 +51,11 @@ public class FirestationDAO implements IFirestationDAO  {
 
                         if (Objects.equals(entry.getValue(), station))        {
                                 addresses.add(entry.getKey());
+                                addressCount++;
                         }
+                }
+                if (addressCount == 0)  {
+                        addresses = null;
                 }
 
                 return addresses;

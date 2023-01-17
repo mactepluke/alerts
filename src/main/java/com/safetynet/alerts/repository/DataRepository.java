@@ -6,8 +6,7 @@ import com.safetynet.alerts.model.Person;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static java.lang.System.lineSeparator;
 
@@ -46,6 +45,7 @@ public class DataRepository {
         this.medicalRecordsTable = dataRepository.getMedicalRecordsTable();
         this.firestationsTable = dataRepository.getFirestationsTable();
     }
+
 
     @Override
     public String toString() {

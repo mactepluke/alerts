@@ -73,6 +73,11 @@ public class Person  {
         return this.email;
     }
 
+    public boolean isAChild()   {
+        //TODO
+        return false;
+    }
+
     @Override
     public String toString()    {
         return "first name: " + this.firstName

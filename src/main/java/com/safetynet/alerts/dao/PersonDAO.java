@@ -7,6 +7,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 @Component
 public class PersonDAO implements IPersonDAO {
 
@@ -29,6 +34,39 @@ public class PersonDAO implements IPersonDAO {
     @Override
     public Person get(String id) {
         return dataRepository.getPersonsTable().get(id);
+    }
+
+    public List<Person> getPersonsListByField(String fieldType, String fieldValue)   {
+        int idCount = 0;
+        List<Person> personsList = new ArrayList<>();
+        Map<String, Person> personsTable = dataRepository.getPersonsTable();
+
+        switch (fieldType) {
+            case "address" -> {
+                for (Map.Entry<String, Person> entry : personsTable.entrySet()) {
+
+                    if (Objects.equals(entry.getValue().getAddress(), fieldValue)) {
+                        personsList.add(entry.getValue());
+                        idCount++;
+                    }
+                }
+            }
+            case "city" -> {
+                for (Map.Entry<String, Person> entry : personsTable.entrySet()) {
+
+                    if (Objects.equals(entry.getValue().getCity(), fieldValue)) {
+                        personsList.add(entry.getValue());
+                        idCount++;
+                    }
+                }
+            }
+        }
+
+        if (idCount == 0)  {
+            personsList = null;
+        }
+
+        return personsList;
     }
 
 }

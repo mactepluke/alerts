@@ -10,12 +10,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import static com.safetynet.alerts.configuration.DataConfig.getApplicationProperty;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -84,7 +85,7 @@ class BasicEndpointsRequests {
     @DisplayName("Update a person's data")
     void UpdatePersonDataEndpointTest() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/person/{id}", "testFirstNametestLastName")
+        mockMvc.perform(put("/person/{id}", "testFirstNametestLastName")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"address\":\"Big Apple Street\", \"city\":\"NYC\", \"zip\":\"95230\", \"phone\":\"555-177-845\", \"email\":\"test@gmail.com\"}")
                         .accept(MediaType.APPLICATION_JSON))
@@ -95,7 +96,7 @@ class BasicEndpointsRequests {
     @DisplayName("Delete a person")
     void DeletePersonEndpointTest() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/person/{id}", "JerryTest"))
+        mockMvc.perform(delete("/person/{id}", "JerryTest"))
                 .andExpect(status().isOk());
     }
 
@@ -115,7 +116,7 @@ class BasicEndpointsRequests {
     @DisplayName("Update a medical record's data")
     void UpdateMedicalRepositoryDataEndpointTest() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/medicalRecord/{id}", "testFirstNametestLastName")
+        mockMvc.perform(put("/medicalRecord/{id}", "testFirstNametestLastName")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"birthdate\":\"11/08/1980\", \"allergies\":[\"dust\", \"caviar\"]}")
                         .accept(MediaType.APPLICATION_JSON))
@@ -126,7 +127,7 @@ class BasicEndpointsRequests {
     @DisplayName("Delete a medical record")
     void DeleteMedicalRecordEndpointTest() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/medicalRecord/{id}", "TestMedicalRecord"))
+        mockMvc.perform(delete("/medicalRecord/{id}", "TestMedicalRecord"))
                 .andExpect(status().isOk());
     }
 
@@ -146,7 +147,7 @@ class BasicEndpointsRequests {
     @DisplayName("Update a firestation's number")
     void UpdateFirestationNumberEndpointTest() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/firestation/{address}", "Maple St")
+        mockMvc.perform(put("/firestation/{address}", "Maple St")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("2")
                         .accept(MediaType.APPLICATION_JSON))
@@ -157,10 +158,10 @@ class BasicEndpointsRequests {
     @DisplayName("Delete a firestation/address")
     void DeleteFirestationEndpointTest() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/firestation/{value}", "666 Dangerous Neighborhood"))
+        mockMvc.perform(delete("/firestation/{value}", "666 Dangerous Neighborhood"))
                 .andExpect(status().isOk());
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/firestation/{value}", "4"))
+        mockMvc.perform(delete("/firestation/{value}", "4"))
                 .andExpect(status().isOk());
     }
 }
@@ -174,9 +175,61 @@ class BasicEndpointsRequests {
         @DisplayName("Get the persons covered by a firestation")
         void getPersonsByFirestationEndpointTest() throws Exception {
 
-            mockMvc.perform(MockMvcRequestBuilders.get("/firestation?stationNumber=3"))
+            mockMvc.perform(get("/firestation?stationNumber=3"))
                     .andExpect(status().isOk());
         }
 
+        //http://localhost:8080/childAlert?address=<address>
+        @Test
+        @DisplayName("Get the child living at an address")
+        void getChildFromAddressEndpointTest() throws Exception {
+
+            mockMvc.perform(get("/childAlert?address=Maple St"))
+                    .andExpect(status().isOk());
+        }
+
+        //http://localhost:8080/phoneAlert?firestation=<firestation_number>
+            @Test
+            @DisplayName("Get the persons' phone who are covered by a firestation")
+            void getPersonsPhoneByFirestationEndpointTest() throws Exception {
+
+                mockMvc.perform(get("/phoneAlert?firestation=3"))
+                        .andExpect(status().isOk());
+            }
+
+        //http://localhost:8080/fire?address=<address>
+                @Test
+                @DisplayName("Get the persons living at an address and its firestation")
+                void getPersonsAndFirestationFromAddressEndpointTest() throws Exception {
+
+                    mockMvc.perform(get("/fire?address=1509 Culver St"))
+                            .andExpect(status().isOk());
+
+                }
+        //http://localhost:8080/flood/stations?stations=<a list of station_numbers>
+                    @Test
+                    @DisplayName("Get the persons by address who are covered by a list of firestations")
+                    void getPersonsByFirestationFloodEndpointTest() throws Exception {
+
+                        mockMvc.perform(get("/flood/stations?stations=1,2,3"))
+                                .andExpect(status().isOk());
+                    }
+        //http://localhost:8080/personInfo?firstName=<firstName>&lastName=<lastName>
+                        @Test
+                        @DisplayName("Get a persons' info and medical conditions by name")
+                        void getPersonInfoEndpointTest() throws Exception {
+
+                            mockMvc.perform(get("/personInfo?firstName=testFirstName&lastName=testLastName"))
+                                    .andExpect(status().isOk());
+                        }
+        //http://localhost:8080/communityEmail?city=<city>
+                            @Test
+                            @DisplayName("Get emails of persons living in a city")
+                            void getPersonsEmailByCityEndpointTest() throws Exception {
+
+                                mockMvc.perform(get("/communityEmail?city=Culver"))
+                                        .andExpect(status().isOk());
+
+                            }
     }
 }
