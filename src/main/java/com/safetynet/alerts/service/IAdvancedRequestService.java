@@ -3,10 +3,11 @@ package com.safetynet.alerts.service;
 
 import com.safetynet.alerts.model.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 public interface IAdvancedRequestService {
-    PersonsByFirestation fetchPersonsByFirestation(String stationNumber);
+    PersonsByFirestation fetchPersonsByFirestation(String stationNumber) throws ParseException;
 
     ChildFromAddress fetchChildFromAddress(String address);
 

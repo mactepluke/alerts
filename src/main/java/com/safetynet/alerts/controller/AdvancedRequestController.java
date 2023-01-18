@@ -1,7 +1,13 @@
 package com.safetynet.alerts.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jsoniter.JsonIterator;
+import com.jsoniter.output.JsonStream;
 import com.safetynet.alerts.model.*;
 import com.safetynet.alerts.service.AdvancedRequestService;
+import com.safetynet.alerts.service.DataLists;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,23 +22,33 @@ public class AdvancedRequestController {
 
     @Autowired
     AdvancedRequestService ars;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @GetMapping(path = "/firestation", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public PersonsByFirestation getPersonsByFirestation(@RequestParam String stationNumber) {
+    public PersonsByFirestation getPersonsByFirestation(@RequestParam String stationNumber) throws JsonProcessingException {
 
         logger.info("Get request received: get the list of persons covered by station: {}", stationNumber);
 
-        return ars.fetchPersonsByFirestation(stationNumber);
+        PersonsByFirestation result = ars.fetchPersonsByFirestation(stationNumber);
+        String log = objectMapper.writeValueAsString(result);
+        logger.info("Request result: {}", log);
+
+        return result;
     }
 
     @GetMapping(path = "/childAlert", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ChildFromAddress getChildFromAddress(@RequestParam String address) {
+    public ChildFromAddress getChildFromAddress(@RequestParam String address) throws JsonProcessingException {
 
         logger.info("Get request received: get the list of child living at address: {}", address);
 
-        return ars.fetchChildFromAddress(address);
+        ChildFromAddress result = ars.fetchChildFromAddress(address);
+        String log = objectMapper.writeValueAsString(result);
+        logger.info("Request result: {}", log);
+
+        return result;
     }
 
     @GetMapping(path = "/phoneAlert", produces = MediaType.APPLICATION_JSON_VALUE)

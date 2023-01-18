@@ -1,33 +1,36 @@
 package com.safetynet.alerts.model;
 
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class PersonsByFirestation {
-    private int adultNumber = 0;
-    private int childNumber = 0;
+    private int adults = 0;
+    private int child = 0;
+    private int unknown = 0;
     private List<CoveredPerson> coveredPersonsList = null;
 
-    public int getAdultNumber() {
-        return adultNumber;
+    public int getAdults() {
+        return adults;
     }
 
-    public int getChildNumber() {
-        return childNumber;
+    public int getChild() {
+        return child;
     }
 
-    private static final Logger logger = LogManager.getLogger(PersonsByFirestation.class);
-
-    public void setAdultNumber(int adultNumber) {
-        this.adultNumber = adultNumber;
+    public int getUnknown() {
+        return unknown;
     }
 
-    public void setChildNumber(int childNumber) {
-        this.childNumber = childNumber;
+    public void setAdults(int adults) {
+        this.adults = adults;
+    }
+
+    public void setChild(int child) {
+        this.child = child;
+    }
+
+    public void setUnknown(int unknown) {
+        this.unknown = unknown;
     }
 
     public void addCoveredPerson(String firstName, String lastName, String address, String phone) {

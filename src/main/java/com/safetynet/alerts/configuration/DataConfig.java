@@ -37,7 +37,7 @@ public class DataConfig {
         FileInputStream fis = null;
 
         try {
-            fis = new FileInputStream("src/main/resources/application.properties");
+            fis = new FileInputStream("target/classes/application.properties");
             properties.load(fis);
 
             property = properties.getProperty(propertyName);
