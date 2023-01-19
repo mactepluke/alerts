@@ -1,13 +1,10 @@
 package com.safetynet.alerts.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jsoniter.JsonIterator;
-import com.jsoniter.output.JsonStream;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.safetynet.alerts.model.*;
 import com.safetynet.alerts.service.AdvancedRequestService;
-import com.safetynet.alerts.service.DataLists;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +19,6 @@ public class AdvancedRequestController {
 
     @Autowired
     AdvancedRequestService ars;
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @GetMapping(path = "/firestation", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -32,8 +27,7 @@ public class AdvancedRequestController {
         logger.info("Get request received: get the list of persons covered by station: {}", stationNumber);
 
         PersonsByFirestation result = ars.fetchPersonsByFirestation(stationNumber);
-        String log = objectMapper.writeValueAsString(result);
-        logger.info("Request result: {}", log);
+        logResult(result);
 
         return result;
     }
@@ -45,55 +39,75 @@ public class AdvancedRequestController {
         logger.info("Get request received: get the list of child living at address: {}", address);
 
         ChildFromAddress result = ars.fetchChildFromAddress(address);
-        String log = objectMapper.writeValueAsString(result);
-        logger.info("Request result: {}", log);
+        logResult(result);
 
         return result;
     }
 
     @GetMapping(path = "/phoneAlert", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public PersonsPhoneByFirestation getPersonsPhoneByFirestation(@RequestParam String firestation) {
+    public PersonsPhoneByFirestation getPersonsPhoneByFirestation(@RequestParam String firestation) throws JsonProcessingException {
 
         logger.info("Get request received: get the list of the phone numbers of persons covered by station: {}", firestation);
 
-        return ars.fetchPersonsPhoneByFirestation(firestation);
+        PersonsPhoneByFirestation result = ars.fetchPersonsPhoneByFirestation(firestation);
+        logResult(result);
+
+        return result;
     }
 
     @GetMapping(path = "/fire", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public PersonsAndFirestationFromAddress getPersonsAndFirestationFromAddress(@RequestParam String address) {
+    public PersonsAndFirestationFromAddress getPersonsAndFirestationFromAddress(@RequestParam String address) throws JsonProcessingException {
 
         logger.info("Get request received: get the list of persons and the firestation at address: {}", address);
 
-        return ars.fetchPersonsAndFirestationFromAddress(address);
+        PersonsAndFirestationFromAddress result = ars.fetchPersonsAndFirestationFromAddress(address);
+        logResult(result);
+
+        return result;
     }
 
     @GetMapping(path = "/flood/stations", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public PersonsByFirestationFlood getPersonsByFirestationFlood(@RequestParam List<String> stations) {
+    public PersonsByFirestationFlood getPersonsByFirestationFlood(@RequestParam List<String> stations) throws JsonProcessingException {
 
         logger.info("Get request received: get the list of persons covered by these stations: {}", stations);
 
-        return ars.fetchPersonsByFirestationFlood(stations);
+        PersonsByFirestationFlood result = ars.fetchPersonsByFirestationFlood(stations);
+        logResult(result);
+
+        return result;
     }
 
     @GetMapping(path = "/personInfo", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public PersonInfo getPersonInfo(@RequestParam String firstName, @RequestParam String lastName) {
+    public PersonInfo getPersonInfo(@RequestParam String firstName, @RequestParam String lastName) throws JsonProcessingException {
 
         logger.info("Get request received: get information about: {} {}", firstName, lastName);
 
-        return ars.fetchPersonInfo(firstName, lastName);
+        PersonInfo result = ars.fetchPersonInfo(firstName, lastName);
+        logResult(result);
+
+        return result;
     }
 
     @GetMapping(path = "/communityEmail", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public PersonsEmailByCity getPersonsEmailByCity(@RequestParam String city) {
+    public PersonsEmailByCity getPersonsEmailByCity(@RequestParam String city) throws JsonProcessingException {
 
         logger.info("Get request received: get emails of all persons from: {}", city);
 
-        return ars.fetchPersonsEmailByCity(city);
+        PersonsEmailByCity result = ars.fetchPersonsEmailByCity(city);
+        logResult(result);
+
+        return result;
+    }
+
+    private static void logResult(Object result) throws JsonProcessingException {
+        final ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+        String log = objectMapper.writeValueAsString(result);
+        logger.info("Request result: {}", log);
     }
 
 }

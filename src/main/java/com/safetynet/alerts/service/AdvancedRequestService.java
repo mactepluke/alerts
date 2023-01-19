@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class AdvancedRequestService implements IAdvancedRequestService {
@@ -50,8 +52,7 @@ public class AdvancedRequestService implements IAdvancedRequestService {
                         } else {
                             adultNumber++;
                         }
-                    }
-                    else {
+                    } else {
                         unknownNumber++;
                     }
                 }
@@ -71,13 +72,13 @@ public class AdvancedRequestService implements IAdvancedRequestService {
 
         List<Person> personsInHome = personDAO.getPersonsListByField("address", address);
 
-        if (personsInHome != null)  {
+        if (personsInHome != null) {
             for (Person person : personsInHome) {
 
                 MedicalRecord medicalRecord = medicalRecordDAO.get(person.getId());
-                if (medicalRecord != null && medicalRecord.isAChild())  {
+                if (medicalRecord != null && medicalRecord.isAChild()) {
                     childFromAddress.addChild(person.getFirstName(), person.getLastName(), medicalRecord.getAge());
-                }   else {
+                } else {
                     if (others == null) {
                         others = new ArrayList<>();
                     }
@@ -97,38 +98,140 @@ public class AdvancedRequestService implements IAdvancedRequestService {
 
     @Override
     public PersonsPhoneByFirestation fetchPersonsPhoneByFirestation(String firestation) {
-        PersonsPhoneByFirestation personsPhoneByFirestation = new PersonsPhoneByFirestation();
-        //TODO
+        PersonsPhoneByFirestation personsPhoneByFirestation = null;
+        List<String> addresses;
+        List<Person> personsList = null;
+
+        addresses = firestationDAO.getAddresses(firestation);
+
+        if (addresses != null) {
+
+            for (String address : addresses) {
+                List<Person> homeResidents = personDAO.getPersonsListByField("address", address);
+
+                if (homeResidents != null) {
+                    if (personsList == null) {
+                        personsList = new ArrayList<>();
+                    }
+                    personsList.addAll(homeResidents);
+                }
+            }
+
+            if (personsList != null) {
+                Set<String> phones = new HashSet<>();
+                for (Person person : personsList) {
+                    String phone = person.getPhone();
+                    if (phone != null) {
+                        phones.add(phone);
+                    }
+                }
+
+                personsPhoneByFirestation = new PersonsPhoneByFirestation();
+                personsPhoneByFirestation.setPhones(phones);
+            }
+        }
+
         return personsPhoneByFirestation;
     }
 
     @Override
     public PersonsAndFirestationFromAddress fetchPersonsAndFirestationFromAddress(String address) {
-        PersonsAndFirestationFromAddress personsAndFirestationFromAddress = new PersonsAndFirestationFromAddress();
-        //TODO
+        PersonsAndFirestationFromAddress personsAndFirestationFromAddress = null;
+
+        List<Person> personList = personDAO.getPersonsListByField("address", address);
+
+        if (personList != null) {
+            personsAndFirestationFromAddress = new PersonsAndFirestationFromAddress();
+
+            for (Person person : personList) {
+
+                MedicalSummary medicalSummary = new MedicalSummary(medicalRecordDAO.get(person.getId()));
+
+                personsAndFirestationFromAddress.addPersonsLivingAtAddress(person.getFirstName(), person.getLastName(), medicalSummary);
+            }
+        }
+
+        String station = firestationDAO.get(address);
+        if (station != null) {
+            if (personsAndFirestationFromAddress == null) {
+                personsAndFirestationFromAddress = new PersonsAndFirestationFromAddress();
+            }
+            personsAndFirestationFromAddress.setStation(station);
+        }
+
         return personsAndFirestationFromAddress;
     }
 
     @Override
     public PersonsByFirestationFlood fetchPersonsByFirestationFlood(List<String> stations) {
-        PersonsByFirestationFlood personsByFirestationFlood = new PersonsByFirestationFlood();
-        //TODO
+        PersonsByFirestationFlood personsByFirestationFlood = null;
+
+        if (stations != null)   {
+
+            for (String station : stations) {
+                List<String> addresses = firestationDAO.getAddresses(station);
+
+                if (addresses != null)  {
+                    if (personsByFirestationFlood == null)    {
+                        personsByFirestationFlood = new PersonsByFirestationFlood();
+                    }
+                    for(String address : addresses) {
+                        List<Person> personList = personDAO.getPersonsListByField("address", address);
+
+                        if (personList != null) {
+                            for(Person person : personList) {
+
+                                MedicalSummary medicalSummary = new MedicalSummary(medicalRecordDAO.get(person.getId()));
+
+                                personsByFirestationFlood.addCoveredPerson(station, address, person.getFirstName(), person.getLastName(), medicalSummary);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         return personsByFirestationFlood;
     }
 
     @Override
     public PersonInfo fetchPersonInfo(String firstName, String lastName) {
-        PersonInfo personInfo = new PersonInfo();
-        //TODO
+        PersonInfo personInfo = null;
+
+        List<Person> personList = personDAO.getPersonsListByField("lastName", lastName);
+
+        if (personList != null) {
+            personInfo = new PersonInfo();
+
+            for (Person person : personList) {
+
+                MedicalSummary medicalSummary = new MedicalSummary(medicalRecordDAO.get(person.getId()));
+
+                personInfo.addPersonInfo(person.getFirstName(), lastName, person.getEmail(), medicalSummary);
+            }
+        }
         return personInfo;
     }
 
     @Override
     public PersonsEmailByCity fetchPersonsEmailByCity(String city) {
-        PersonsEmailByCity personsEmailByCity = new PersonsEmailByCity();
-        //TODO
+        PersonsEmailByCity personsEmailByCity = null;
+
+        List<Person> personList = personDAO.getPersonsListByField("city", city);
+        if (personList != null) {
+            personsEmailByCity = new PersonsEmailByCity();
+            Set<String> emails = new HashSet<>();
+
+            for (Person person : personList) {
+                String email = person.getEmail();
+                if (email != null) {
+                    emails.add(email);
+                }
+            }
+            personsEmailByCity.setEmails(emails);
+        }
+
         return personsEmailByCity;
     }
-
 
 }

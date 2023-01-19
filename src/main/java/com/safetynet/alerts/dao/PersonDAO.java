@@ -60,6 +60,15 @@ public class PersonDAO implements IPersonDAO {
                     }
                 }
             }
+            case "lastName" -> {
+                for (Map.Entry<String, Person> entry : personsTable.entrySet()) {
+
+                    if (Objects.equals(entry.getValue().getLastName(), fieldValue)) {
+                        personsList.add(entry.getValue());
+                        idCount++;
+                    }
+                }
+            }
         }
 
         if (idCount == 0)  {

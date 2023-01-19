@@ -76,8 +76,8 @@ public class Person  {
 
     @Override
     public String toString()    {
-        return "first name: " + this.firstName
-                + ", last name: " + this.lastName
+        return "firstName: " + this.firstName
+                + ", lastName: " + this.lastName
                 + ", address: " + this.address
                 + ", city: " + this.city
                 + ", zip: " + this.zip
