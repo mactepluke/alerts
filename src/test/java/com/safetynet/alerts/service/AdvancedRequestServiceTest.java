@@ -4,15 +4,11 @@ import com.safetynet.alerts.model.*;
 import com.safetynet.alerts.repository.DataRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
-
 import static com.safetynet.alerts.configuration.DataConfig.getApplicationProperty;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -57,6 +53,7 @@ class AdvancedRequestServiceTest {
 
 
     @Test
+    @DisplayName("Fetch Persons By Firestation")
     void fetchPersonsByFirestation() {
 
         PersonsByFirestation personsByFirestation = ars.fetchPersonsByFirestation("80");
@@ -67,6 +64,7 @@ class AdvancedRequestServiceTest {
     }
 
     @Test
+    @DisplayName("Fetch Child From Address")
     void fetchChildFromAddress() {
 
         ChildFromAddress childFromAddress = ars.fetchChildFromAddress("John's address");
@@ -76,6 +74,7 @@ class AdvancedRequestServiceTest {
     }
 
     @Test
+    @DisplayName("Fetch Persons Phone By Firestation")
     void fetchPersonsPhoneByFirestation() {
 
         PersonsPhoneByFirestation personsPhoneByFirestation = ars.fetchPersonsPhoneByFirestation("3");
@@ -85,6 +84,7 @@ class AdvancedRequestServiceTest {
     }
 
     @Test
+    @DisplayName("Fetch Persons And Firestation From Address")
     void fetchPersonsAndFirestationFromAddress() {
 
         PersonsAndFirestationFromAddress personsAndFirestationFromAddress = ars.fetchPersonsAndFirestationFromAddress("1509 Culver St");
@@ -94,6 +94,7 @@ class AdvancedRequestServiceTest {
     }
 
     @Test
+    @DisplayName("Fetch Persons By Firestation Flood")
     void fetchPersonsByFirestationFlood() {
 
         PersonsByFirestationFlood personsByFirestationFlood = ars.fetchPersonsByFirestationFlood(List.of("2","3","80","666"));
@@ -103,6 +104,7 @@ class AdvancedRequestServiceTest {
     }
 
     @Test
+    @DisplayName("Fetch Person Info")
     void fetchPersonInfo() {
 
         PersonInfo personInfo = ars.fetchPersonInfo("John", "Lennon");
@@ -111,6 +113,7 @@ class AdvancedRequestServiceTest {
     }
 
     @Test
+    @DisplayName("Fetch Persons Email By City")
     void fetchPersonsEmailByCity() {
 
         PersonsEmailByCity personsEmailByCity = ars.fetchPersonsEmailByCity("Culver");

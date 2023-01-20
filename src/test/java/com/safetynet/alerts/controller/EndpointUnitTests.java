@@ -59,7 +59,6 @@ class EndpointUnitTests {
     }
 
     @Test
-    @DisplayName("Context loads")
     void contextLoads() {
     }
 
@@ -82,7 +81,7 @@ class BasicEndpointsRequests {
 
 
     @Test
-    @DisplayName("Update a person's data")
+    @DisplayName("Update a person")
     void UpdatePerson() throws Exception {
 
         mockMvc.perform(put("/person/{id}", "testFirstNametestLastName")
@@ -113,7 +112,7 @@ class BasicEndpointsRequests {
     }
 
     @Test
-    @DisplayName("Update a medical record's data")
+    @DisplayName("Update a medical record")
     void UpdateMedicalRepositoryData() throws Exception {
 
         mockMvc.perform(put("/medicalRecord/{id}", "testFirstNametestLastName")
@@ -172,7 +171,7 @@ class BasicEndpointsRequests {
 
         // http://localhost:8080/firestation?stationNumber=<station_number>
         @Test
-        @DisplayName("Get the persons covered by a firestation")
+        @DisplayName("Get persons by firestation")
         void getPersonsByFirestation() throws Exception {
 
             mockMvc.perform(get("/firestation?stationNumber=3"))
@@ -181,7 +180,7 @@ class BasicEndpointsRequests {
 
         //http://localhost:8080/childAlert?address=<address>
         @Test
-        @DisplayName("Get the child living at an address")
+        @DisplayName("Get child from address")
         void getChildFromAddress() throws Exception {
 
             mockMvc.perform(get("/childAlert?address=Maple St"))
@@ -190,7 +189,7 @@ class BasicEndpointsRequests {
 
         //http://localhost:8080/phoneAlert?firestation=<firestation_number>
             @Test
-            @DisplayName("Get the persons' phone who are covered by a firestation")
+            @DisplayName("Get persons' phone by firestation")
             void getPersonsPhoneByFirestation() throws Exception {
 
                 mockMvc.perform(get("/phoneAlert?firestation=3"))
@@ -199,7 +198,7 @@ class BasicEndpointsRequests {
 
         //http://localhost:8080/fire?address=<address>
                 @Test
-                @DisplayName("Get the persons living at an address and its firestation")
+                @DisplayName("Get persons and firestation by address")
                 void getPersonsAndFirestationFromAddress() throws Exception {
 
                     mockMvc.perform(get("/fire?address=1509 Culver St"))
@@ -208,7 +207,7 @@ class BasicEndpointsRequests {
                 }
         //http://localhost:8080/flood/stations?stations=<a list of station_numbers>
                     @Test
-                    @DisplayName("Get the persons by address who are covered by a list of firestations")
+                    @DisplayName("Get persons by firestations list (flood)")
                     void getPersonsByFirestationFlood() throws Exception {
 
                         mockMvc.perform(get("/flood/stations?stations=1,2,3"))
@@ -216,7 +215,7 @@ class BasicEndpointsRequests {
                     }
         //http://localhost:8080/personInfo?firstName=<firstName>&lastName=<lastName>
                         @Test
-                        @DisplayName("Get a persons' info and medical conditions by name")
+                        @DisplayName("Get person info")
                         void getPersonInfo() throws Exception {
 
                             mockMvc.perform(get("/personInfo?firstName=testFirstName&lastName=testLastName"))
@@ -224,7 +223,7 @@ class BasicEndpointsRequests {
                         }
         //http://localhost:8080/communityEmail?city=<city>
                             @Test
-                            @DisplayName("Get emails of persons living in a city")
+                            @DisplayName("Get person email from city")
                             void getPersonsEmailByCity() throws Exception {
 
                                 mockMvc.perform(get("/communityEmail?city=Culver"))
