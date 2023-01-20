@@ -5,7 +5,7 @@ import java.util.List;
 
 public class PersonsAndFirestationFromAddress {
     private String station = "<no station is covering these addresses>";
-    private List<PersonsLivingAtAddress> personsLivingAtAddresses = null;
+    private List<PersonsLivingAtAddress> personsLivingAtAddress = null;
 
     public String getStation() {
         return station;
@@ -15,15 +15,15 @@ public class PersonsAndFirestationFromAddress {
         this.station = station;
     }
 
-    public List<PersonsLivingAtAddress> getPersonsLivingAtAddresses() {
-        return personsLivingAtAddresses;
+    public List<PersonsLivingAtAddress> getPersonsLivingAtAddress() {
+        return personsLivingAtAddress;
     }
 
     public void addPersonsLivingAtAddress(String firstName, String lastName, MedicalSummary medicalSummary) {
-        if (this.personsLivingAtAddresses == null) {
-            this.personsLivingAtAddresses = new ArrayList<>();
+        if (this.personsLivingAtAddress == null) {
+            this.personsLivingAtAddress = new ArrayList<>();
         }
-        this.personsLivingAtAddresses.add(new PersonsAndFirestationFromAddress.PersonsLivingAtAddress(firstName, lastName, medicalSummary));
+        this.personsLivingAtAddress.add(new PersonsAndFirestationFromAddress.PersonsLivingAtAddress(firstName, lastName, medicalSummary));
     }
 
     class PersonsLivingAtAddress  {

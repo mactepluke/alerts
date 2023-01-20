@@ -1,4 +1,4 @@
-package com.safetynet.alerts;
+package com.safetynet.alerts.controller;
 
 import com.safetynet.alerts.repository.DataRepository;
 import com.safetynet.alerts.service.IDataFileLoader;
@@ -23,14 +23,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestInstance(Lifecycle.PER_CLASS)
-class AlertsApplicationTests {
+class EndpointUnitTests {
 
-    private static final Logger logger = LogManager.getLogger(AlertsApplicationTests.class);
+    private static final Logger logger = LogManager.getLogger(EndpointUnitTests.class);
 
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    IDataFileLoader dataFileLoader;
+    private IDataFileLoader dataFileLoader;
     @Autowired
     private DataRepository dataRepository;
 
@@ -71,7 +71,7 @@ class BasicEndpointsRequests {
     // Tests for endpoint: http://localhost:8080/person
     @Test
     @DisplayName("Add a person")
-    void AddPersonEndpointTest() throws Exception {
+    void AddPerson() throws Exception {
 
         mockMvc.perform(post("/person")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -83,7 +83,7 @@ class BasicEndpointsRequests {
 
     @Test
     @DisplayName("Update a person's data")
-    void UpdatePersonDataEndpointTest() throws Exception {
+    void UpdatePerson() throws Exception {
 
         mockMvc.perform(put("/person/{id}", "testFirstNametestLastName")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -94,7 +94,7 @@ class BasicEndpointsRequests {
 
     @Test
     @DisplayName("Delete a person")
-    void DeletePersonEndpointTest() throws Exception {
+    void DeletePerson() throws Exception {
 
         mockMvc.perform(delete("/person/{id}", "JerryTest"))
                 .andExpect(status().isOk());
@@ -103,18 +103,18 @@ class BasicEndpointsRequests {
     // Tests for endpoint: http://localhost:8080/medicalRecord
     @Test
     @DisplayName("Add a medical record")
-    void AddMedicalRecordEndpointTest() throws Exception {
+    void AddMedicalRecord() throws Exception {
 
         mockMvc.perform(post("/medicalRecord")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"firstName\":\"John\", \"lastName\":\"Doe\", \"birthdate\":\"Big Kahuna Burger road\", \"medications\":[\"modafinil\"], \"allergies\":[\"dust\", \"caviar\"]}")
+                        .content("{\"firstName\":\"John\", \"lastName\":\"Doe\", \"birthdate\":\"12/28/1960\", \"medications\":[\"modafinil\"], \"allergies\":[\"dust\", \"caviar\"]}")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
     }
 
     @Test
     @DisplayName("Update a medical record's data")
-    void UpdateMedicalRepositoryDataEndpointTest() throws Exception {
+    void UpdateMedicalRepositoryData() throws Exception {
 
         mockMvc.perform(put("/medicalRecord/{id}", "testFirstNametestLastName")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -125,7 +125,7 @@ class BasicEndpointsRequests {
 
     @Test
     @DisplayName("Delete a medical record")
-    void DeleteMedicalRecordEndpointTest() throws Exception {
+    void DeleteMedicalRecord() throws Exception {
 
         mockMvc.perform(delete("/medicalRecord/{id}", "TestMedicalRecord"))
                 .andExpect(status().isOk());
@@ -134,7 +134,7 @@ class BasicEndpointsRequests {
     // Tests for endpoint: http://localhost:8080/firestation
     @Test
     @DisplayName("Add a firestation and address")
-    void AddFirestationAndAddressEndpointTest() throws Exception {
+    void AddFirestationAndAddress() throws Exception {
 
         mockMvc.perform(post("/firestation")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -145,7 +145,7 @@ class BasicEndpointsRequests {
 
     @Test
     @DisplayName("Update a firestation's number")
-    void UpdateFirestationNumberEndpointTest() throws Exception {
+    void UpdateFirestationNumber() throws Exception {
 
         mockMvc.perform(put("/firestation/{address}", "Maple St")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -156,7 +156,7 @@ class BasicEndpointsRequests {
 
     @Test
     @DisplayName("Delete a firestation/address")
-    void DeleteFirestationEndpointTest() throws Exception {
+    void DeleteFirestation() throws Exception {
 
         mockMvc.perform(delete("/firestation/{value}", "666 Dangerous Neighborhood"))
                 .andExpect(status().isOk());
@@ -173,7 +173,7 @@ class BasicEndpointsRequests {
         // http://localhost:8080/firestation?stationNumber=<station_number>
         @Test
         @DisplayName("Get the persons covered by a firestation")
-        void getPersonsByFirestationEndpointTest() throws Exception {
+        void getPersonsByFirestation() throws Exception {
 
             mockMvc.perform(get("/firestation?stationNumber=3"))
                     .andExpect(status().isOk());
@@ -182,7 +182,7 @@ class BasicEndpointsRequests {
         //http://localhost:8080/childAlert?address=<address>
         @Test
         @DisplayName("Get the child living at an address")
-        void getChildFromAddressEndpointTest() throws Exception {
+        void getChildFromAddress() throws Exception {
 
             mockMvc.perform(get("/childAlert?address=Maple St"))
                     .andExpect(status().isOk());
@@ -191,7 +191,7 @@ class BasicEndpointsRequests {
         //http://localhost:8080/phoneAlert?firestation=<firestation_number>
             @Test
             @DisplayName("Get the persons' phone who are covered by a firestation")
-            void getPersonsPhoneByFirestationEndpointTest() throws Exception {
+            void getPersonsPhoneByFirestation() throws Exception {
 
                 mockMvc.perform(get("/phoneAlert?firestation=3"))
                         .andExpect(status().isOk());
@@ -200,7 +200,7 @@ class BasicEndpointsRequests {
         //http://localhost:8080/fire?address=<address>
                 @Test
                 @DisplayName("Get the persons living at an address and its firestation")
-                void getPersonsAndFirestationFromAddressEndpointTest() throws Exception {
+                void getPersonsAndFirestationFromAddress() throws Exception {
 
                     mockMvc.perform(get("/fire?address=1509 Culver St"))
                             .andExpect(status().isOk());
@@ -209,7 +209,7 @@ class BasicEndpointsRequests {
         //http://localhost:8080/flood/stations?stations=<a list of station_numbers>
                     @Test
                     @DisplayName("Get the persons by address who are covered by a list of firestations")
-                    void getPersonsByFirestationFloodEndpointTest() throws Exception {
+                    void getPersonsByFirestationFlood() throws Exception {
 
                         mockMvc.perform(get("/flood/stations?stations=1,2,3"))
                                 .andExpect(status().isOk());
@@ -217,7 +217,7 @@ class BasicEndpointsRequests {
         //http://localhost:8080/personInfo?firstName=<firstName>&lastName=<lastName>
                         @Test
                         @DisplayName("Get a persons' info and medical conditions by name")
-                        void getPersonInfoEndpointTest() throws Exception {
+                        void getPersonInfo() throws Exception {
 
                             mockMvc.perform(get("/personInfo?firstName=testFirstName&lastName=testLastName"))
                                     .andExpect(status().isOk());
@@ -225,7 +225,7 @@ class BasicEndpointsRequests {
         //http://localhost:8080/communityEmail?city=<city>
                             @Test
                             @DisplayName("Get emails of persons living in a city")
-                            void getPersonsEmailByCityEndpointTest() throws Exception {
+                            void getPersonsEmailByCity() throws Exception {
 
                                 mockMvc.perform(get("/communityEmail?city=Culver"))
                                         .andExpect(status().isOk());

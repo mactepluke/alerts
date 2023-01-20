@@ -4,8 +4,6 @@ import com.safetynet.alerts.dao.FirestationDAO;
 import com.safetynet.alerts.dao.MedicalRecordDAO;
 import com.safetynet.alerts.dao.PersonDAO;
 import com.safetynet.alerts.model.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +14,6 @@ import java.util.Set;
 
 @Service
 public class AdvancedRequestService implements IAdvancedRequestService {
-
-    private static final Logger logger = LogManager.getLogger(AdvancedRequestService.class);
 
     @Autowired
     PersonDAO personDAO;
@@ -30,7 +26,7 @@ public class AdvancedRequestService implements IAdvancedRequestService {
 
     @Override
     public PersonsByFirestation fetchPersonsByFirestation(String stationNumber) {
-        PersonsByFirestation personsByFirestation = new PersonsByFirestation();
+        PersonsByFirestation personsByFirestation = null;
         List<String> addressList = firestationDAO.getAddresses(stationNumber);
 
         if (addressList != null) {
@@ -42,6 +38,9 @@ public class AdvancedRequestService implements IAdvancedRequestService {
             for (String address : addressList) {
                 persons = personDAO.getPersonsListByField("address", address);
                 for (Person person : persons) {
+                    if (personsByFirestation == null) {
+                        personsByFirestation = new PersonsByFirestation();
+                    }
                     personsByFirestation.addCoveredPerson(person.getFirstName(), person.getLastName(), person.getAddress(), person.getPhone());
 
                     MedicalRecord medicalRecord = medicalRecordDAO.get(person.getId());
@@ -57,9 +56,11 @@ public class AdvancedRequestService implements IAdvancedRequestService {
                     }
                 }
             }
-            personsByFirestation.setChild(childNumber);
-            personsByFirestation.setAdults(adultNumber);
-            personsByFirestation.setUnknown(unknownNumber);
+            if (personsByFirestation != null) {
+                personsByFirestation.setChild(childNumber);
+                personsByFirestation.setAdults(adultNumber);
+                personsByFirestation.setUnknown(unknownNumber);
+            }
         }
 
         return personsByFirestation;
@@ -166,22 +167,25 @@ public class AdvancedRequestService implements IAdvancedRequestService {
     public PersonsByFirestationFlood fetchPersonsByFirestationFlood(List<String> stations) {
         PersonsByFirestationFlood personsByFirestationFlood = null;
 
-        if (stations != null)   {
+        if (stations != null) {
 
             for (String station : stations) {
+
                 List<String> addresses = firestationDAO.getAddresses(station);
 
-                if (addresses != null)  {
-                    if (personsByFirestationFlood == null)    {
-                        personsByFirestationFlood = new PersonsByFirestationFlood();
-                    }
-                    for(String address : addresses) {
+                if (addresses != null) {
+
+                    for (String address : addresses) {
                         List<Person> personList = personDAO.getPersonsListByField("address", address);
 
                         if (personList != null) {
-                            for(Person person : personList) {
+                            for (Person person : personList) {
 
                                 MedicalSummary medicalSummary = new MedicalSummary(medicalRecordDAO.get(person.getId()));
+
+                                if (personsByFirestationFlood == null) {
+                                    personsByFirestationFlood = new PersonsByFirestationFlood();
+                                }
 
                                 personsByFirestationFlood.addCoveredPerson(station, address, person.getFirstName(), person.getLastName(), medicalSummary);
                             }
