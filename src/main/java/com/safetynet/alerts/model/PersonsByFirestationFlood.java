@@ -7,8 +7,8 @@ public class PersonsByFirestationFlood {
     Map<String, Map<String, Set<CoveredPerson>>> stations = null;
 
 
-    public void addCoveredPerson(String station, String address, String firstName, String lastName, MedicalSummary medicalSummary)  {
-        CoveredPerson coveredPerson = new CoveredPerson(firstName, lastName, medicalSummary);
+    public void addCoveredPerson(String station, String address, String firstName, String lastName, String phone, MedicalSummary medicalSummary)  {
+        CoveredPerson coveredPerson = new CoveredPerson(firstName, lastName, phone, medicalSummary);
 
         if (this.stations == null) {
             this.stations = new HashMap<>();
@@ -26,13 +26,15 @@ public class PersonsByFirestationFlood {
     class CoveredPerson {
         String firstName;
         String lastName;
+        String phone;
         byte age;
         List<String> medications;
         List<String> allergies;
 
-        public CoveredPerson(String firstName, String lastName, MedicalSummary medicalSummary) {
+        public CoveredPerson(String firstName, String lastName, String phone, MedicalSummary medicalSummary) {
             this.firstName = firstName;
             this.lastName = lastName;
+            this.phone = phone;
             this.age = medicalSummary.getAge();
             this.medications = medicalSummary.getMedications();
             this.allergies = medicalSummary.getAllergies();
@@ -48,6 +50,10 @@ public class PersonsByFirestationFlood {
 
         public byte getAge() {
             return age;
+        }
+
+        public String getPhone() {
+            return phone;
         }
 
         public List<String> getMedications() {

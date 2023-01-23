@@ -1,5 +1,6 @@
 package com.safetynet.alerts.service;
 
+import com.safetynet.alerts.controller.MedicalRecordController;
 import com.safetynet.alerts.dao.IPersonDAO;
 import com.safetynet.alerts.model.Person;
 import org.apache.logging.log4j.LogManager;
@@ -11,10 +12,10 @@ import java.util.Optional;
 @Service
 public class PersonService implements IPersonService    {
 
+    private static final Logger logger = LogManager.getLogger(PersonService.class);
+
     @Autowired
     private IPersonDAO personDAO;
-
-    private static final Logger logger = LogManager.getLogger(PersonService.class);
 
     @Override
     public Person create(Person newPerson) {

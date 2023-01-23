@@ -1,7 +1,9 @@
-package com.safetynet.alerts.service;
+package com.safetynet.alerts.integration;
 
 import com.safetynet.alerts.model.*;
 import com.safetynet.alerts.repository.DataRepository;
+import com.safetynet.alerts.service.AdvancedRequestService;
+import com.safetynet.alerts.service.IDataFileLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
@@ -16,9 +18,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class AdvancedRequestServiceTest {
+class AdvancedRequestServiceIT {
 
-    private static final Logger logger = LogManager.getLogger(AdvancedRequestServiceTest.class);
+    private static final Logger logger = LogManager.getLogger(AdvancedRequestServiceIT.class);
 
     @Autowired
     private IDataFileLoader dataFileLoader;
@@ -31,10 +33,9 @@ class AdvancedRequestServiceTest {
     @BeforeAll
     void setUp() {
 
-        logger.info("*** SETTING UP SERVICE PACKAGE INTEGRATION TESTS ***");
+        logger.info("*** STARTING ADVANCED SERVICE INTEGRATION TESTS ***");
 
         String dataFilePath = getApplicationProperty("testdatafilepath");
-
         logger.debug("Loading data file: {}", dataFilePath);
 
         DataRepository testRepository;
@@ -44,10 +45,9 @@ class AdvancedRequestServiceTest {
 
 
     @AfterAll
-    void showLogs() {
-
-        logger.info("*** SERVICE PACKAGE INTEGRATION TESTS FINISHED ***");
-        logger.debug("Displaying DataRepository content:");
+    void tearDown() {
+        logger.info("*** ADVANCED SERVICE INTEGRATION TESTS FINISHED ***");
+        logger.debug("Displaying mock DataRepository content:");
         logger.debug(dataRepository);
     }
 

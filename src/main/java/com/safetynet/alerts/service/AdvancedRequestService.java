@@ -187,7 +187,7 @@ public class AdvancedRequestService implements IAdvancedRequestService {
                                     personsByFirestationFlood = new PersonsByFirestationFlood();
                                 }
 
-                                personsByFirestationFlood.addCoveredPerson(station, address, person.getFirstName(), person.getLastName(), medicalSummary);
+                                personsByFirestationFlood.addCoveredPerson(station, address, person.getFirstName(), person.getLastName(), person.getPhone(), medicalSummary);
                             }
                         }
                     }
