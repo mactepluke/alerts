@@ -19,9 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ServiceTests {
+class ServiceITests {
 
-    private static final Logger logger = LogManager.getLogger(ServiceTests.class);
+    private static final Logger logger = LogManager.getLogger(ServiceITests.class);
 
     @Autowired
     private IDataFileLoader dataFileLoader;
