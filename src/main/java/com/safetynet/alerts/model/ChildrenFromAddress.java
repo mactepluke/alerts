@@ -1,10 +1,9 @@
 package com.safetynet.alerts.model;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChildFromAddress {
+public class ChildrenFromAddress {
     private List<Child> child = null;
     private List<Person> others;
 
@@ -20,7 +19,7 @@ public class ChildFromAddress {
         if (this.child == null) {
             this.child = new ArrayList<>();
         }
-        this.child.add(new ChildFromAddress.Child(firstName, lastName, age));
+        this.child.add(new ChildrenFromAddress.Child(firstName, lastName, age));
     }
 
     public List<Child> getChild() {

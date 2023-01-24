@@ -18,8 +18,8 @@ public class MedicalRecord {
     private final String firstName;
     private final String lastName;
     private String birthdate;
-    private final List<String> medications;
-    private final List<String> allergies;
+    private List<String> medications;
+    private List<String> allergies;
 
     private static final Logger logger = LogManager.getLogger(MedicalRecord.class);
 
@@ -86,6 +86,13 @@ public class MedicalRecord {
         return this.allergies;
     }
 
+    public void setMedications(List<String> medications) {
+        this.medications = medications;
+    }
+
+    public void setAllergies(List<String> allergies) {
+        this.allergies = allergies;
+    }
 
     @Override
     public String toString() {
@@ -95,5 +102,6 @@ public class MedicalRecord {
                 + ", medications: " + this.medications
                 + ", allergies: " + this.allergies;
     }
+
 
 }

@@ -6,7 +6,6 @@ public class PersonsByFirestationFlood {
 
     Map<String, Map<String, Set<CoveredPerson>>> stations = null;
 
-
     public void addCoveredPerson(String station, String address, String firstName, String lastName, String phone, MedicalSummary medicalSummary)  {
         CoveredPerson coveredPerson = new CoveredPerson(firstName, lastName, phone, medicalSummary);
 

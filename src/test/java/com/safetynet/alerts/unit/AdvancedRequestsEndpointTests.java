@@ -1,7 +1,6 @@
 package com.safetynet.alerts.unit;
 
 import com.safetynet.alerts.model.Firestation;
-import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.service.AdvancedRequestService;
 import org.apache.logging.log4j.LogManager;
@@ -70,7 +69,7 @@ class AdvancedRequestsEndpointTests {
     @DisplayName("Get child from address")
     void getChildFromAddress() throws Exception {
 
-        when(ars.fetchChildFromAddress(anyString())).thenReturn(null);
+        when(ars.fetchChildrenFromAddress(anyString())).thenReturn(null);
 
         mockMvc.perform(get("/childAlert?address=" + testPerson.getAddress()))
                 .andExpect(status().isOk());

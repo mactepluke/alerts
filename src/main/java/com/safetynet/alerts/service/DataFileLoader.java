@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Service that uses "JsonIterator" to load data from file of the json format to the repository
+ */
 @Service
 public class DataFileLoader implements IDataFileLoader {
 
@@ -22,6 +25,9 @@ public class DataFileLoader implements IDataFileLoader {
 
     IDataLists dataLists = new DataLists();
 
+    /**
+     * @see IDataFileLoader#loadDataFile(String)
+     */
     @Override
     public DataRepository loadDataFile(String dataFilePath) {
 

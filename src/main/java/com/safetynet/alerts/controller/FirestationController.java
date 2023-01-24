@@ -25,6 +25,7 @@ public class FirestationController {
     public ResponseEntity<String> create(@RequestBody Firestation newFirestation, UriComponentsBuilder uriComponentsBuilder) {
 
         logger.info("Post request received: create a new firestation in repository");
+        String result;
 
         if (isEmpty(newFirestation.getAddress()) || isEmpty(newFirestation.getStationNumber())) {
             logger.error("Invalid post request: empty fields: address or number");
@@ -33,14 +34,24 @@ public class FirestationController {
                     .body("Bad request: address or station number should not be empty");
 
         } else {
-            logger.info("Successful post request: saving new firestation in repository: address: {}, station: {}", newFirestation.getAddress(), newFirestation.getStationNumber());
-            firestationService.create(newFirestation);
 
-            return ResponseEntity
-                    .created(uriComponentsBuilder.build(newFirestation))
-                    .body("Successful post request");
+            result = firestationService.create(newFirestation);
+
+            if (result != null) {
+                logger.info("Unsuccessful post request: firestation {} already exists in repository at address: {}", result, newFirestation.getAddress());
+                return ResponseEntity
+                        .created(uriComponentsBuilder.build(newFirestation))
+                        .body("Unsuccessful post request");
+            }
+            else {
+                logger.info("Successful post request: saving new firestation in repository: address: {}, station: {}", newFirestation.getAddress(), newFirestation.getStationNumber());
+
+                return ResponseEntity
+                        .created(uriComponentsBuilder.build(newFirestation))
+                        .body("Successful post request");
+            }
+
         }
-
     }
 
     @PutMapping(path = "{address}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

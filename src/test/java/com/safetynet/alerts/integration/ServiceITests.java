@@ -13,8 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 import static com.safetynet.alerts.configuration.DataConfig.getApplicationProperty;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -36,9 +35,16 @@ class ServiceITests {
     @Autowired
     private FirestationService firestationService;
 
-    private Person testPerson;
-    private MedicalRecord testMedicalRecord;
+    private Person testPerson, newPerson;
+    private MedicalRecord testMedicalRecord, newMedicalRecord;
     private Firestation testFirestation;
+    private final static String TEST_FIRST_NAME = "Johnny";
+    private final static String TEST_LAST_NAME = "Walker";
+    private final static String TEST_ADDRESS = "1820 Scotland St";
+    private final static String TEST_BIRTHDATE = "11/08/1980";
+    private final static String TEST_STATION = "12";
+    private final static String TEST_NEW_STATION = "999";
+
 
     @BeforeAll
     void setUp() {
@@ -52,9 +58,16 @@ class ServiceITests {
         testRepository = dataFileLoader.loadDataFile(dataFilePath);
         dataRepository.copyRepository(testRepository);
 
-        testPerson = new Person("Johnny", "Walker");
-        testMedicalRecord = new MedicalRecord("Johnny", "Walker");
-        testFirestation = new Firestation("1820 Scotland St", "12");
+        testPerson = new Person(TEST_FIRST_NAME, TEST_LAST_NAME);
+        newPerson = new Person(TEST_FIRST_NAME, TEST_LAST_NAME);
+        newPerson.setAddress(TEST_ADDRESS);
+
+        testMedicalRecord = new MedicalRecord(TEST_FIRST_NAME, TEST_LAST_NAME);
+        newMedicalRecord = new MedicalRecord(TEST_FIRST_NAME, TEST_LAST_NAME);
+        newMedicalRecord.setBirthdate(TEST_BIRTHDATE);
+
+        testFirestation = new Firestation(TEST_ADDRESS, TEST_STATION);
+
     }
 
 
@@ -84,10 +97,10 @@ class ServiceITests {
         @DisplayName("Fetch Child From Address")
         void fetchChildFromAddress() {
 
-            ChildFromAddress childFromAddress = ars.fetchChildFromAddress("John's address");
+            ChildrenFromAddress childrenFromAddress = ars.fetchChildrenFromAddress("John's address");
 
-            assertEquals(1, childFromAddress.getChild().size());
-            assertEquals(2, childFromAddress.getOthers().size());
+            assertEquals(1, childrenFromAddress.getChild().size());
+            assertEquals(2, childrenFromAddress.getOthers().size());
         }
 
         @Test
@@ -146,41 +159,42 @@ class ServiceITests {
         @DisplayName("Adds, updates and deletes a person")
         void personServiceTest() {
 
-            assertEquals(testPerson
-                    .getId(), personService
+            assertNull(personService.create(testPerson));
+
+            assertEquals(TEST_ADDRESS, personService
                     .delete(personService
-                            .update(personService
-                                    .create(testPerson)
-                                    .getId(), testPerson)
+                            .update(testPerson
+                                    .getId(), newPerson)
                             .getId())
-                    .getId());
+                    .getAddress());
         }
 
         @Test
-        @DisplayName("Adds, updates and deletes a person")
+        @DisplayName("Adds, updates and deletes a medical record")
         void medicalRecordServiceTest() {
 
-            assertEquals(testMedicalRecord
-                    .getId(), medicalRecordService
+            assertNull(medicalRecordService.create(testMedicalRecord));
+
+            assertEquals(TEST_BIRTHDATE, medicalRecordService
                     .delete(medicalRecordService
-                            .update(medicalRecordService
-                                    .create(testMedicalRecord)
-                                    .getId(), testMedicalRecord)
+                            .update(testMedicalRecord
+                                    .getId(), newMedicalRecord)
                             .getId())
-                    .getId());
+                    .getBirthdate());
         }
 
         @Test
-        @DisplayName("Adds, updates and deletes a person")
+        @DisplayName("Adds, updates and deletes a firestation")
         void firestationServiceTest() {
 
-            assertEquals(testFirestation.getAddress(), firestationService
+            assertNull(firestationService.create(testFirestation));
+
+            assertEquals(TEST_NEW_STATION, firestationService
                     .delete(firestationService
-                            .update(firestationService
-                                    .create(testFirestation)
-                                    .getAddress(), testFirestation
-                                    .getAddress())
-                            .getAddress()).getAddress());
+                    .update(testFirestation
+                            .getAddress(), TEST_NEW_STATION)
+                    .getAddress())
+                    .getStationNumber());
         }
 
     }

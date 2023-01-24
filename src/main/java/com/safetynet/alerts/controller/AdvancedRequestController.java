@@ -34,11 +34,11 @@ public class AdvancedRequestController {
 
     @GetMapping(path = "/childAlert", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ChildFromAddress getChildFromAddress(@RequestParam String address) throws JsonProcessingException {
+    public ChildrenFromAddress getChildrenFromAddress(@RequestParam String address) throws JsonProcessingException {
 
-        logger.info("Get request received: get the list of child living at address: {}", address);
+        logger.info("Get request received: get the list of children living at address: {}", address);
 
-        ChildFromAddress result = ars.fetchChildFromAddress(address);
+        ChildrenFromAddress result = ars.fetchChildrenFromAddress(address);
         logResult(result);
 
         return result;

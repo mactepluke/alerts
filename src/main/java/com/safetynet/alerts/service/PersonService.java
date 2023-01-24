@@ -1,29 +1,37 @@
 package com.safetynet.alerts.service;
 
-import com.safetynet.alerts.controller.MedicalRecordController;
 import com.safetynet.alerts.dao.IPersonDAO;
 import com.safetynet.alerts.model.Person;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
+/**
+ * A service handling model objects of Person type
+ */
 @Service
 public class PersonService implements IPersonService    {
-
-    private static final Logger logger = LogManager.getLogger(PersonService.class);
 
     @Autowired
     private IPersonDAO personDAO;
 
+    /**
+     * @see IPersonService#create(Person)
+     */
     @Override
     public Person create(Person newPerson) {
 
-        return personDAO.save(newPerson);
+        Person result = personDAO.get(newPerson.getId());
 
+        if (result == null) {
+            result = personDAO.save(newPerson);
+        }
+        return result;
     }
 
+    /**
+     * @see IPersonService#update(String, Person)
+     */
     @Override
     public Person update(String id, Person person) {
 
@@ -66,7 +74,9 @@ public class PersonService implements IPersonService    {
             return null;
         }
     }
-
+    /**
+     * @see IPersonService#delete(String)
+     */
     @Override
     public Person delete(String id) {
 

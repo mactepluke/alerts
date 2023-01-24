@@ -2,33 +2,43 @@ package com.safetynet.alerts.service;
 
 import com.safetynet.alerts.dao.IMedicalRecordDAO;
 import com.safetynet.alerts.model.MedicalRecord;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import com.safetynet.alerts.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * A service handling model objects of MedicalRecord type
+ */
 @Service
 public class MedicalRecordService implements IMedicalRecordService  {
 
     @Autowired
     private IMedicalRecordDAO medicalRecordDAO;
 
-    private static final Logger logger = LogManager.getLogger(PersonService.class);
-
+    /**
+     * @see IMedicalRecordService#create(MedicalRecord)
+     */
     @Override
     public MedicalRecord create(MedicalRecord newMedicalRecord) {
 
-        return medicalRecordDAO.save(newMedicalRecord);
+        MedicalRecord result = medicalRecordDAO.get(newMedicalRecord.getId());
+
+        if (result == null) {
+            result = medicalRecordDAO.save(newMedicalRecord);
+        }
+        return result;
 
     }
-
+    /**
+     * @see IMedicalRecordService#update(String, MedicalRecord)
+     */
     @Override
     public MedicalRecord update(String id, MedicalRecord medicalRecord) {
 
         Optional<MedicalRecord> e = Optional.ofNullable(medicalRecordDAO.get(id));
-
 
             if (e.isPresent()) {
 
@@ -41,18 +51,12 @@ public class MedicalRecordService implements IMedicalRecordService  {
 
                 List<String> medications = medicalRecord.getMedications();
                 if (medications != null) {
-
-                    for (String medication : medications) {
-                        currentMedicalRecord.addMedication(medication);
-                    }
+                    currentMedicalRecord.setMedications(medications);
                 }
 
                 List<String> allergies = medicalRecord.getAllergies();
                 if (allergies != null) {
-
-                    for (String allergy : allergies) {
-                        currentMedicalRecord.addAllergy(allergy);
-                    }
+                    currentMedicalRecord.setAllergies(allergies);
                 }
 
             medicalRecordDAO.save(currentMedicalRecord);
@@ -63,7 +67,9 @@ public class MedicalRecordService implements IMedicalRecordService  {
             return null;
         }
     }
-
+    /**
+     * @see IMedicalRecordService#delete(String)
+     */
     @Override
     public MedicalRecord delete(String id) {
 

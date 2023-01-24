@@ -25,16 +25,25 @@ public class PersonController {
     public ResponseEntity<String> create(@RequestBody Person newPerson, UriComponentsBuilder uriComponentsBuilder) {
 
         logger.info("Post request received: create a new person in repository");
+        Person result;
 
         if (isEmpty(newPerson.getFirstName()) || isEmpty(newPerson.getLastName())) {
             logger.error("Invalid post request: empty fields: firstname or lastname");
             return ResponseEntity.badRequest()
                     .body("Bad request: firstname or lastname should not be empty");
         } else {
-            logger.info("Successful post request: saving new person in repository with id: {}", newPerson.getId());
 
-            logger.debug(newPerson);
-            personService.create(newPerson);
+            result = personService.create(newPerson);
+
+            if (result != null) {
+                logger.info("Unsuccessful post request: person of id \"{}\" already exists", result.getId());
+                return ResponseEntity
+                        .created(uriComponentsBuilder.build(newPerson))
+                        .body("Unsuccessful post request");
+            }
+            else {
+                logger.info("Successful post request: saving new person in repository with id: {}", newPerson.getId());
+            }
 
             return ResponseEntity
                     .created(uriComponentsBuilder.build(newPerson))

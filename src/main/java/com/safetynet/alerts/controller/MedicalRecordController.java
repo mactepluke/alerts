@@ -25,6 +25,7 @@ public class MedicalRecordController {
     public ResponseEntity<String> create(@RequestBody MedicalRecord newMedicalRecord, UriComponentsBuilder uriComponentsBuilder) {
 
         logger.info("Post request received: create a new medical record in repository");
+        MedicalRecord result;
 
         if (isEmpty(newMedicalRecord.getFirstName()) || isEmpty(newMedicalRecord.getLastName())) {
             logger.error("Invalid post request: empty fields: first name or last name");
@@ -32,7 +33,18 @@ public class MedicalRecordController {
             return ResponseEntity.badRequest()
                     .body("Bad request: firstname or lastname should not be empty");
         } else {
-            logger.info("Successful post request: saving new medical record in repository with id: {}", newMedicalRecord.getId());
+
+            result = medicalRecordService.create(newMedicalRecord);
+
+            if (result != null) {
+                logger.info("Unsuccessful post request: medical record of id \"{}\" already exists", result.getId());
+                return ResponseEntity
+                        .created(uriComponentsBuilder.build(newMedicalRecord))
+                        .body("Unsuccessful post request");
+            }
+            else    {
+                logger.info("Successful post request: saving new medical record in repository with id: {}", newMedicalRecord.getId());
+            }
 
             logger.debug(newMedicalRecord);
             medicalRecordService.create(newMedicalRecord);

@@ -48,7 +48,7 @@ class FirestationEndpointsTest {
     @DisplayName("Add a firestation and address")
     void AddFirestationAndAddress() throws Exception {
 
-        when(firestationService.create(any(Firestation.class))).thenReturn(testFirestation);
+        when(firestationService.create(any(Firestation.class))).thenReturn(testFirestation.getStationNumber());
 
         mockMvc.perform(post("/firestation")
                         .contentType(MediaType.APPLICATION_JSON)

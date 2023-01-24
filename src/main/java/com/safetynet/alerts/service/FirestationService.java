@@ -2,22 +2,37 @@ package com.safetynet.alerts.service;
 
 import com.safetynet.alerts.dao.IFirestationDAO;
 import com.safetynet.alerts.model.Firestation;
+import com.safetynet.alerts.model.MedicalRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
+/**
+ * A service handling model objects of Firestation type
+ */
 @Service
 public class FirestationService implements IFirestationService {
 
     @Autowired
     private IFirestationDAO firestationDAO;
 
+    /**
+     * @see IFirestationService#create(Firestation)
+     */
     @Override
-    public Firestation create(Firestation newFirestation) {
+    public String create(Firestation newFirestation) {
 
-        return firestationDAO.save(newFirestation);
+        String result = firestationDAO.get(newFirestation.getAddress());
+
+        if (result == null) {
+            result = firestationDAO.save(newFirestation);
+            }
+
+        return result;
     }
-
+    /**
+     * @see IFirestationService#update(String, String)
+     */
     @Override
     public Firestation update(String address, String station) {
 
@@ -34,7 +49,9 @@ public class FirestationService implements IFirestationService {
             return null;
         }
     }
-
+    /**
+     * @see IFirestationService#delete(String)
+     */
     @Override
     public Firestation delete(String value) {
 

@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.safetynet.alerts.dao.IPersonDAO.FieldType.*;
+
 @Service
 public class AdvancedRequestService implements IAdvancedRequestService {
 
@@ -36,7 +38,7 @@ public class AdvancedRequestService implements IAdvancedRequestService {
             List<Person> persons;
 
             for (String address : addressList) {
-                persons = personDAO.getPersonsListByField("address", address);
+                persons = personDAO.getPersonsListByField(ADDRESS, address);
                 for (Person person : persons) {
                     if (personsByFirestation == null) {
                         personsByFirestation = new PersonsByFirestation();
@@ -67,18 +69,18 @@ public class AdvancedRequestService implements IAdvancedRequestService {
     }
 
     @Override
-    public ChildFromAddress fetchChildFromAddress(String address) {
-        ChildFromAddress childFromAddress = new ChildFromAddress();
+    public ChildrenFromAddress fetchChildrenFromAddress(String address) {
+        ChildrenFromAddress childrenFromAddress = new ChildrenFromAddress();
         List<Person> others = null;
 
-        List<Person> personsInHome = personDAO.getPersonsListByField("address", address);
+        List<Person> personsInHome = personDAO.getPersonsListByField(ADDRESS, address);
 
         if (personsInHome != null) {
             for (Person person : personsInHome) {
 
                 MedicalRecord medicalRecord = medicalRecordDAO.get(person.getId());
                 if (medicalRecord != null && medicalRecord.isAChild()) {
-                    childFromAddress.addChild(person.getFirstName(), person.getLastName(), medicalRecord.getAge());
+                    childrenFromAddress.addChild(person.getFirstName(), person.getLastName(), medicalRecord.getAge());
                 } else {
                     if (others == null) {
                         others = new ArrayList<>();
@@ -88,13 +90,13 @@ public class AdvancedRequestService implements IAdvancedRequestService {
             }
         }
 
-        if (childFromAddress.getChild() != null) {
-            childFromAddress.setOthers(others);
+        if (childrenFromAddress.getChild() != null) {
+            childrenFromAddress.setOthers(others);
         } else {
-            childFromAddress = null;
+            childrenFromAddress = null;
         }
 
-        return childFromAddress;
+        return childrenFromAddress;
     }
 
     @Override
@@ -108,7 +110,7 @@ public class AdvancedRequestService implements IAdvancedRequestService {
         if (addresses != null) {
 
             for (String address : addresses) {
-                List<Person> homeResidents = personDAO.getPersonsListByField("address", address);
+                List<Person> homeResidents = personDAO.getPersonsListByField(ADDRESS, address);
 
                 if (homeResidents != null) {
                     if (personsList == null) {
@@ -139,7 +141,7 @@ public class AdvancedRequestService implements IAdvancedRequestService {
     public PersonsAndFirestationFromAddress fetchPersonsAndFirestationFromAddress(String address) {
         PersonsAndFirestationFromAddress personsAndFirestationFromAddress = null;
 
-        List<Person> personList = personDAO.getPersonsListByField("address", address);
+        List<Person> personList = personDAO.getPersonsListByField(ADDRESS, address);
 
         if (personList != null) {
             personsAndFirestationFromAddress = new PersonsAndFirestationFromAddress();
@@ -176,7 +178,7 @@ public class AdvancedRequestService implements IAdvancedRequestService {
                 if (addresses != null) {
 
                     for (String address : addresses) {
-                        List<Person> personList = personDAO.getPersonsListByField("address", address);
+                        List<Person> personList = personDAO.getPersonsListByField(ADDRESS, address);
 
                         if (personList != null) {
                             for (Person person : personList) {
@@ -202,7 +204,7 @@ public class AdvancedRequestService implements IAdvancedRequestService {
     public PersonInfo fetchPersonInfo(String firstName, String lastName) {
         PersonInfo personInfo = null;
 
-        List<Person> personList = personDAO.getPersonsListByField("lastName", lastName);
+        List<Person> personList = personDAO.getPersonsListByField(LAST_NAME, lastName);
 
         if (personList != null) {
             personInfo = new PersonInfo();
@@ -221,7 +223,7 @@ public class AdvancedRequestService implements IAdvancedRequestService {
     public PersonsEmailByCity fetchPersonsEmailByCity(String city) {
         PersonsEmailByCity personsEmailByCity = null;
 
-        List<Person> personList = personDAO.getPersonsListByField("city", city);
+        List<Person> personList = personDAO.getPersonsListByField(CITY, city);
         if (personList != null) {
             personsEmailByCity = new PersonsEmailByCity();
             Set<String> emails = new HashSet<>();
