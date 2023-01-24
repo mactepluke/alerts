@@ -2,7 +2,6 @@ package com.safetynet.alerts.model;
 
 import com.jsoniter.annotation.JsonCreator;
 import com.jsoniter.annotation.JsonProperty;
-import com.safetynet.alerts.service.AdvancedRequestService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -64,7 +63,7 @@ public class MedicalRecord {
                 LocalDate birthDate = LocalDate.parse(this.birthdate, datePattern);
                 LocalDate today = LocalDate.now();
                 result = (byte) YEARS.between(birthDate, today);
-                ;
+
             } catch (Exception e) {
                 result = -2;
                 logger.error("Incorrect birthdate format: {}", this.birthdate);
@@ -79,29 +78,14 @@ public class MedicalRecord {
         return (this.getAge() < ADULT_AGE);
     }
 
-    public void addMedication(String medication) {
-        this.medications.add(medication);
-    }
-
     public List<String> getMedications() {
         return this.medications;
-    }
-
-    public void deleteMedication(String medication) {
-        this.medications.remove(medication);
-    }
-
-    public void addAllergy(String allergy) {
-        this.allergies.add(allergy);
     }
 
     public List<String> getAllergies() {
         return this.allergies;
     }
 
-    public void removeAllergy(String allergy) {
-        this.allergies.remove(allergy);
-    }
 
     @Override
     public String toString() {
