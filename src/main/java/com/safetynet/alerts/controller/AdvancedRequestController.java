@@ -110,7 +110,7 @@ public class AdvancedRequestController {
     private static void logResult(Object result) throws JsonProcessingException {
         final ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
         String log = objectMapper.writeValueAsString(result);
-        logger.info("Request result: {}", log);
+        logger.info("Successful request. Result: {}", log);
     }
 
 }

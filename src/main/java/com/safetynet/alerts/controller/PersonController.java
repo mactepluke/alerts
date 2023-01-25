@@ -46,6 +46,7 @@ public class PersonController {
             }
             else {
                 logger.info("Successful post request: saving new person in repository with id: {}", newPerson.getId());
+                logger.debug(newPerson);
             }
 
             return ResponseEntity
@@ -83,6 +84,7 @@ public class PersonController {
 
         if (person != null) {
             logger.info("Successful delete request: deleted person with id: {}", id);
+            logger.debug(person);
         } else {
             logger.error("Cannot delete person: no person in repository with id: {}", id);
         }

@@ -48,6 +48,7 @@ public class FirestationController {
             }
             else {
                 logger.info("Successful post request: saving new firestation in repository: address: {}, station: {}", newFirestation.getAddress(), newFirestation.getStationNumber());
+                logger.debug(newFirestation);
 
                 return ResponseEntity
                         .created(uriComponentsBuilder.build(newFirestation))
@@ -88,8 +89,10 @@ public class FirestationController {
         if (firestation != null) {
             if (firestation.getAddress().equals("ALL")) {
                 logger.info("Successful delete request: deleted all firestations of number: {}", value);
+                logger.debug(firestation);
             } else {
                 logger.info("Successful delete request: deleted firestation: {}", firestation);
+                logger.debug(firestation);
             }
 
         } else {

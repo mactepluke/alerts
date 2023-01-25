@@ -47,6 +47,7 @@ public class MedicalRecordController {
             }
             else    {
                 logger.info("Successful post request: saving new medical record in repository with id: {}", newMedicalRecord.getId());
+                logger.debug(newMedicalRecord);
             }
 
             logger.debug(newMedicalRecord);
@@ -87,6 +88,7 @@ public class MedicalRecordController {
 
         if (medicalRecord != null) {
             logger.info("Successful delete request: deleted medical record with id: {}", id);
+            logger.debug(medicalRecord);
         }
         else {
             logger.error("Cannot delete medical record: no medical record in repository with id: {}", id);
