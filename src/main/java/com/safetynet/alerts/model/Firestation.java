@@ -3,6 +3,9 @@ package com.safetynet.alerts.model;
 import com.jsoniter.annotation.JsonCreator;
 import com.jsoniter.annotation.JsonProperty;
 
+/**
+ * Basic model type for firestation objects
+ */
 public class Firestation   {
 
     private final String address;

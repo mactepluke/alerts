@@ -11,7 +11,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-
+/**
+ * Configuration bean that creates the data repository from the data file
+ * which path is specified in the application.properties file
+ */
 @Configuration
 public class DataConfig {
 

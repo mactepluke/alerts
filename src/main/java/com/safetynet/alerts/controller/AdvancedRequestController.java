@@ -12,6 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+/**
+ * Rest Controller for advanced requests
+ */
 @RestController
 public class AdvancedRequestController {
 

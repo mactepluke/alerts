@@ -6,7 +6,7 @@ import com.safetynet.alerts.model.*;
 import java.util.List;
 
 /**
- * Interface for services handling advanced model objects types
+ * Interface for services handling advanced repository searches
  */
 public interface IAdvancedRequestService {
 

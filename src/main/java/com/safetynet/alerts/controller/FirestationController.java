@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import static org.apache.logging.log4j.util.Strings.isEmpty;
 
+/**
+ * Rest Controller for basic create, update and delete requests for firestations
+ */
 @RestController
 @RequestMapping("/firestation")
 public class FirestationController {

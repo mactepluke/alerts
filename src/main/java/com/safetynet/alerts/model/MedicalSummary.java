@@ -3,6 +3,9 @@ package com.safetynet.alerts.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Simple subtype for handling recurring uses of medical related data
+ */
 public class MedicalSummary {
     byte age = -1;
     List<String> medications = new ArrayList<>();

@@ -2,7 +2,6 @@ package com.safetynet.alerts.service;
 
 import com.safetynet.alerts.dao.IFirestationDAO;
 import com.safetynet.alerts.model.Firestation;
-import com.safetynet.alerts.model.MedicalRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Optional;

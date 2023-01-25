@@ -12,6 +12,9 @@ import java.util.List;
 
 import static java.time.temporal.ChronoUnit.YEARS;
 
+/**
+ * Basic model type for medical record objects
+ */
 public class MedicalRecord {
     private static final byte ADULT_AGE = 19;
     private final String id;

@@ -14,6 +14,9 @@ import java.util.Set;
 
 import static com.safetynet.alerts.dao.IPersonDAO.FieldType.*;
 
+/**
+ * Service that handles advanced repository searches
+ */
 @Service
 public class AdvancedRequestService implements IAdvancedRequestService {
 
@@ -26,6 +29,9 @@ public class AdvancedRequestService implements IAdvancedRequestService {
     @Autowired
     FirestationDAO firestationDAO;
 
+    /**
+     * @see IAdvancedRequestService#fetchPersonsByFirestation(String)
+     */
     @Override
     public PersonsByFirestation fetchPersonsByFirestation(String stationNumber) {
         PersonsByFirestation personsByFirestation = null;
@@ -68,6 +74,9 @@ public class AdvancedRequestService implements IAdvancedRequestService {
         return personsByFirestation;
     }
 
+    /**
+     * @see IAdvancedRequestService#fetchChildrenFromAddress(String)
+     */
     @Override
     public ChildrenFromAddress fetchChildrenFromAddress(String address) {
         ChildrenFromAddress childrenFromAddress = new ChildrenFromAddress();
@@ -99,6 +108,9 @@ public class AdvancedRequestService implements IAdvancedRequestService {
         return childrenFromAddress;
     }
 
+    /**
+     * @see IAdvancedRequestService#fetchPersonsPhoneByFirestation(String)
+     */
     @Override
     public PersonsPhoneByFirestation fetchPersonsPhoneByFirestation(String firestation) {
         PersonsPhoneByFirestation personsPhoneByFirestation = null;
@@ -137,6 +149,9 @@ public class AdvancedRequestService implements IAdvancedRequestService {
         return personsPhoneByFirestation;
     }
 
+    /**
+     * @see IAdvancedRequestService#fetchPersonsAndFirestationFromAddress(String)
+     */
     @Override
     public PersonsAndFirestationFromAddress fetchPersonsAndFirestationFromAddress(String address) {
         PersonsAndFirestationFromAddress personsAndFirestationFromAddress = null;
@@ -165,6 +180,9 @@ public class AdvancedRequestService implements IAdvancedRequestService {
         return personsAndFirestationFromAddress;
     }
 
+    /**
+     * @see IAdvancedRequestService#fetchPersonsByFirestationFlood(List<String>)
+     */
     @Override
     public PersonsByFirestationFlood fetchPersonsByFirestationFlood(List<String> stations) {
         PersonsByFirestationFlood personsByFirestationFlood = null;
@@ -200,6 +218,9 @@ public class AdvancedRequestService implements IAdvancedRequestService {
         return personsByFirestationFlood;
     }
 
+    /**
+     * @see IAdvancedRequestService#fetchPersonInfo(String, String)
+     */
     @Override
     public PersonInfo fetchPersonInfo(String firstName, String lastName) {
         PersonInfo personInfo = null;
@@ -219,6 +240,9 @@ public class AdvancedRequestService implements IAdvancedRequestService {
         return personInfo;
     }
 
+    /**
+     * @see IAdvancedRequestService#fetchPersonsEmailByCity(String)
+     */
     @Override
     public PersonsEmailByCity fetchPersonsEmailByCity(String city) {
         PersonsEmailByCity personsEmailByCity = null;

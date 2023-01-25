@@ -5,8 +5,6 @@ import com.safetynet.alerts.model.Firestation;
 import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.repository.DataRepository;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -20,8 +18,6 @@ import java.util.Map;
  */
 @Service
 public class DataFileLoader implements IDataFileLoader {
-
-    private static final Logger logger = LogManager.getLogger(DataFileLoader.class);
 
     IDataLists dataLists = new DataLists();
 

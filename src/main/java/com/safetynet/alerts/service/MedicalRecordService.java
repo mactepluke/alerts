@@ -3,7 +3,6 @@ package com.safetynet.alerts.service;
 import com.safetynet.alerts.dao.IMedicalRecordDAO;
 import com.safetynet.alerts.model.MedicalRecord;
 
-import com.safetynet.alerts.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;

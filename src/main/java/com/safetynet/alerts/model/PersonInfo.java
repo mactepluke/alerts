@@ -3,6 +3,9 @@ package com.safetynet.alerts.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Complex object generated following advanced requests, destined to be serialized into a json auto-formatted output
+ */
 public class PersonInfo {
     List<Info> personInformation = null;
 

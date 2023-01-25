@@ -8,7 +8,9 @@ import java.util.*;
 
 import static java.lang.System.lineSeparator;
 
-
+/**
+ * Data repository type that mocks a database (but not persistent)
+ */
 public class DataRepository {
     private Map<String, Person> personsTable = new HashMap<>();
     private Map<String, MedicalRecord> medicalRecordsTable = new HashMap<>();
